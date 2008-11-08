@@ -1,0 +1,6 @@
+- leitura de comandos no teclado
+- escrever refencia do orb num xml em disco
+- implementar tratamento de comandos
+- primeiro teste apenas com migracao de objetos de um orb para outro
+- implementar skel/stub para tratamento da migracao
+
