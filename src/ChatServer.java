@@ -82,7 +82,7 @@ public class ChatServer {
 	    array_comandos.add("$rooms");
 	    array_comandos.add("$leave rio");
 	    */
-
+	    String answer = "";
 	    String command_line = "";
 	    String patternStr = "^\\$(\\w+)(\\s+(.*))?$";
 	    Pattern pattern = Pattern.compile(patternStr);
@@ -102,13 +102,48 @@ public class ChatServer {
 		    String argument = "";
 		    if (matchFound) {
 		        //echo("match found!!!");
-	        	command = matcher.group(1);
+	        	command = matcher.group(1).trim();
 	        	argument = matcher.group(2);
 	        	echo("command: "+command);
 	        	echo("argument: "+argument);
 	        	if (argument!=null) argument = argument.trim();
 	        	if (command.equals("migrate")){ //migrate
-	        		
+	        		Map table_registrados = ORB.instance().getListaObjRegistrados();
+	        		List registrados_aux = new ArrayList();
+	        		Iterator iterator = table_registrados.keySet().iterator();
+	        		int i = 0;
+	        		while (iterator.hasNext()) {
+	        		   String name = (String) iterator.next();
+	        		   prompt(i+". "+name+" -> "+table_registrados.get(name));
+	        		   registrados_aux.add(name);
+	        		   i++;
+	        		}
+
+	        		try {
+	        			while (true) {
+	        				answer = question("Escolha o numero do objeto que deseja migrar \n> ou digite all para todos\n> ou none para abortar");
+	        				if (answer.toLowerCase().trim().equals("all")){
+	        					prompt("Todos os objetos serao migrados!");
+	        					
+	        					break; //saio do loop
+	        				}else if (answer.toLowerCase().trim().equals("none")){
+	        					prompt("saindo da operacao de migracao");
+	        					break;
+	        				}else {
+								int obj_id = 0;
+								try {
+									obj_id = Integer.valueOf(answer);
+									break;
+								}catch(NumberFormatException e) {
+									prompt("Numero invalido!");
+								}
+	        				}
+
+	        			}
+
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 	        		/*
 	        		Map salas_criadas = ChatClient.room_registry.getRooms();
 	        		prompt("salas criadas:");

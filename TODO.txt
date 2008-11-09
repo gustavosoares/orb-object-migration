@@ -3,6 +3,7 @@
 - implementar tratamento de comandos
 - primeiro teste apenas com migracao de objetos de um orb para outro
 - implementar skel/stub para tratamento da migracao
+- implementar metodo para migracao de todos os objetos
 
 Operacoes:
 

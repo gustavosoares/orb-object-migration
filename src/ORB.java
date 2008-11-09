@@ -13,7 +13,8 @@ public class ORB
 {
   private static ORB _orb= new ORB();
   private static String LOG_FILE = "orb_"+_orb.toString()+".log"; 
-  private static Dictionary  _objKeyImplMap = new Hashtable();
+  private static Map  _objKeyImplMap = new HashMap();
+  private static List  _objKeyMigrated = new ArrayList();
   private Address _addr;
   private static BufferedWriter out = null;
   Transport _transp;
@@ -42,23 +43,58 @@ public class ORB
 	
   }
 
-  public Address address()
-  {
-    return _addr;
+  public Address address() {
+	  return _addr;
   }
 
-  public void registerObjectImpl(String ior, ObjectImpl impl)
-  {
-    _objKeyImplMap.put(ior, impl);
-    //echo("objeto registrado: "+ior+" <-> "+impl);
+  public void registerObjectImpl(String ior, ObjectImpl impl) {
+	  _objKeyImplMap.put(ior, impl);
+	  echo("objeto registrado: "+ior+" <-> "+impl);
   }
   
+  /**
+   * Obtem um ObjImpl no hashtable a partir de uma chave
+   * @param ior
+   * @return
+   */
   public static ObjectImpl getObjectImpl(String ior) {
 	  return (ObjectImpl) _objKeyImplMap.get(ior);
   }
 
-  public static String objectToString(Object obj)
-  {
+  /**
+   * Obtem lista de objetos registrados no hashtable
+   * @return
+   */
+  public static Map getListaObjRegistrados(){
+	  	return _objKeyImplMap;
+	  	/*
+	  	List array_registrados = new ArrayList(); 
+		Iterator iterator = _objKeyImplMap.keySet().iterator();
+		while (iterator.hasNext()) {
+		   String name = (String) iterator.next();
+		   array_registrados.add(name);
+		}
+		return array_registrados;
+		*/
+  }
+  
+  /**
+   * Adiciona chave do objeto (ior) na lista de migrados
+   * @param ior
+   */
+  public static void addMigrated(String ior){
+	  _objKeyMigrated.add(ior);
+  }
+  
+  /**
+   * Obtem lista dos objetos migrados
+   * @return
+   */
+  public static List getListaObjMigrados() {
+	  return _objKeyMigrated;
+  }
+  
+  public static String objectToString(Object obj) {
     return obj.objectReference().stringify();
   }
 
@@ -119,7 +155,8 @@ public class ORB
   }
   
   public static void echo(String msg) {
-	  System.out.println(new Date()+" [ORB] "+msg);
+	  //System.out.println(new Date()+" [ORB] "+msg);
+	  System.out.println("[ORB] "+msg);
   }
   
   public static void log(String string) {
