@@ -4,3 +4,9 @@
 - primeiro teste apenas com migracao de objetos de um orb para outro
 - implementar skel/stub para tratamento da migracao
 
+Operacoes:
+
+$migrate: lista objetos e escolhe um ou todos para migrar. Depois lista ORBs para migração
+$migrated: lista objetos migrados
+$quit: encerra a aplicação
+

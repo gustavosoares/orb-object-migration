@@ -99,9 +99,7 @@ public class ChatClient {
 	    String patternStr = "^\\$(\\w+)(\\s+(.*))?$";
 	    Pattern pattern = Pattern.compile(patternStr);
 	    BufferedReader in = null;
-	    //Substituir for pelo while para ler do teclado
 	    while (true) {
-	    //for (int i=0; i < array_comandos.size(); i++){
 	    	//command_line = (String) array_comandos.get(i);
         	in = new BufferedReader(new InputStreamReader(System.in));
             try {
@@ -257,7 +255,7 @@ public class ChatClient {
         		}
 		    }
 		    
-	    }//fim do for
+	    }//fim do while
 	    
 	}
 	

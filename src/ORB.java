@@ -31,7 +31,7 @@ public class ORB
   public void address(Address addr)
   {
     _addr = addr;
-    _transp = _addr.createTransport ();
+    _transp = _addr.createTransport();
     
 	try {
 		out = new BufferedWriter(new FileWriter(LOG_FILE, true));

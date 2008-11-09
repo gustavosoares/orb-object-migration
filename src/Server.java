@@ -13,7 +13,6 @@ import java.net.*;
 import java.util.*;
 
 import xml.ObjectXmlReference;
-import xml.old.PDUXmlRequest;
 
 import com.thoughtworks.xstream.XStream;
 
