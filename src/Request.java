@@ -46,6 +46,19 @@ public class Request {
 	  _codec.putDecimal(arg);
   }
 
+	public void addSequenceReference(Map hashmap) {
+		beginSequence();
+		Iterator iterator = hashmap.keySet().iterator();
+		while (iterator.hasNext()) {
+		   String name = (String) iterator.next();
+		   //echo("Room name: "+name);
+		   Object obj = (Object) hashmap.get(name);
+		   //putStringReply(name);
+		   addObjectReference(obj.objectReference().getXmlReference());
+		}
+		endSequence();
+	}
+	
   public boolean raisedException() {
 	
 	  if (_pdu.replyStatus()==1)
@@ -157,6 +170,7 @@ public class Request {
 	private void echo(String msg) {
 		System.out.println("[Request] "+msg);
 	}
+
   
 }
 

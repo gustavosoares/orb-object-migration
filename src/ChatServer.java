@@ -1,5 +1,7 @@
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -13,6 +15,7 @@ import java.util.regex.Pattern;
 import xml.ObjectXmlReference;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 public class ChatServer {
@@ -124,7 +127,51 @@ public class ChatServer {
 	        				answer = question("Escolha o numero do objeto que deseja migrar \n> ou digite all para todos\n> ou none para abortar");
 	        				if (answer.toLowerCase().trim().equals("all")){
 	        					prompt("Todos os objetos serao migrados!");
+        						//Lista os arquivos em disco no formato _ORB
+        						String curDir = System.getProperty("user.dir");
+        					    File dir = new File(curDir);
+
+        					    List lista_orb = new ArrayList();
+        					    String[] children = dir.list();
+           					    if (children == null) {
+        					    	echo("Nao foi possivel listar o diretorio");
+        					    } else {
+        					        for (int j=0; j<children.length; j++) {
+        					            // Get filename of file or directory
+        					            String filename = children[j];
+        					            if (filename.toLowerCase().startsWith("_orb@")) {
+        					            	String conteudo_xml = readFile(filename);
+        					            	lista_orb.add(conteudo_xml);
+        					            	prompt(j+". "+filename);	
+        					            }
+        					        }   
+        					    }
 	        					
+	        					answer = question("Escolha o ORB de destino\n> ou none para abortar");
+	        					if (answer.toLowerCase().trim().equals("none")){
+		        					prompt("saindo da operacao de migracao");
+		        					break;
+	        					}else{
+	        						//checo se realmente e numero
+									int orb_id = 0;
+									try {
+										orb_id = Integer.valueOf(answer);
+										break;
+									}catch(NumberFormatException e) {
+										prompt("Numero invalido!");
+									}
+									prompt("ORB escolhido: "+answer);
+	        						
+	        					    OrbManager orb_manager = null;
+					            	
+					        	    xstream = new XStream(new DomDriver());
+					        	    xstream.alias("reference", ObjectXmlReference.class);
+					        	    ObjectXmlReference orbmanager_reference = (ObjectXmlReference) xstream.fromXML((String) lista_orb.get(orb_id));
+					        	    ObjectReference orbmanager_ref = new ObjectReference (orbmanager_reference.getObject(), orbmanager_reference.getHost(), orbmanager_reference.getPort());
+					        	    
+					        	    orb_manager = new OrbManagerStub(orbmanager_ref);
+					        	    orb_manager.migrate(ORB.getListaObjRegistrados());
+	        					}
 	        					break; //saio do loop
 	        				}else if (answer.toLowerCase().trim().equals("none")){
 	        					prompt("saindo da operacao de migracao");
@@ -137,6 +184,7 @@ public class ChatServer {
 								}catch(NumberFormatException e) {
 									prompt("Numero invalido!");
 								}
+								prompt("Numero escolhido: "+answer);
 	        				}
 
 	        			}
@@ -211,6 +259,27 @@ public class ChatServer {
         answer = in.readLine();
 		
 		return answer;
+	}
+	
+	public static String readFile(String filename) {
+		StringBuffer xml = new StringBuffer();
+		BufferedReader infile=null;
+	    try {
+	        infile = new BufferedReader(new FileReader(filename));
+	        String str;
+	        while ((str = infile.readLine()) != null) {
+	            xml.append(str+"\n");
+	        }
+	        infile.close();
+	    } catch (IOException e) {
+	    	e.printStackTrace();
+	    }finally{
+	    	try {
+				infile.close();
+			} catch (IOException e) {
+			}
+	    }
+		return xml.toString();
 	}
 
 }

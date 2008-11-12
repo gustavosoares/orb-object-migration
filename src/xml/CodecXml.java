@@ -1,7 +1,9 @@
 package xml;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -73,7 +75,7 @@ public class CodecXml extends CodecXmlObject{
 	public void putObjectReference(String xml_reference) {
 		addField(xml_reference);
 	}
-
+	
 	public List getSequence (String field_name) {
 		
 		List fields = new ArrayList();
@@ -225,5 +227,6 @@ public class CodecXml extends CodecXmlObject{
 	private void echo(String msg) {
 		System.out.println("[CodecXml] "+msg);
 	}
+
 		
 }

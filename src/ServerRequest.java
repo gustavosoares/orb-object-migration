@@ -152,5 +152,10 @@ public class ServerRequest
 		return _requestPdu.codec().getObjectReferenceFromSequence();
 	}
 
+	public List getSequenceReference() {
+		// TODO Auto-generated method stub
+		return _requestPdu.codec().getSequenceReference();
+	}
+
 }
 
