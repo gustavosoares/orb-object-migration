@@ -40,8 +40,24 @@ public class CodecXml extends CodecXmlObject{
 		addField(4, "decimal", String.valueOf(arg));		
 	}
 
+	public void putObjectId(String key) {
+		addField(4, "objectid", key);
+	}
+
+	public void putClassName(String arg) {
+		addField(4, "classname", arg);
+	}
+	
 	public String getString() {
 		return getField("string");
+	}
+
+	public String getObjectId() {
+		return getField("objectid");
+	}
+	
+	public String getClassName() {
+		return getField("classname");
 	}
 
 	public int getInteger() {
@@ -227,6 +243,5 @@ public class CodecXml extends CodecXmlObject{
 	private void echo(String msg) {
 		System.out.println("[CodecXml] "+msg);
 	}
-
 		
 }

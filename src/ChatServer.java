@@ -65,11 +65,12 @@ public class ChatServer {
 		////////////////////
 		// ORBManager.xml //
 		////////////////////
+		String orb_filename = "_ORB@"+server_host+"@"+String.valueOf(server_port)+".xml";
 	    obj_xml_reference = new ObjectXmlReference("ORB@"+server_host+"@"+String.valueOf(server_port), server_host, String.valueOf(server_port));
 		xstream = new XStream();
 		xstream.alias("reference", ObjectXmlReference.class);
 		ref_xml = xstream.toXML(obj_xml_reference);
-		writeFile("_ORB@"+server_host+"@"+String.valueOf(server_port)+".xml", ref_xml);
+		writeFile(orb_filename, ref_xml);
 		
 		//Start do ORB
 		ORBThread orb_server = new ORBThread(ORB.instance());
@@ -111,102 +112,7 @@ public class ChatServer {
 	        	echo("argument: "+argument);
 	        	if (argument!=null) argument = argument.trim();
 	        	if (command.equals("migrate")){ //migrate
-	        		Map table_registrados = ORB.instance().getListaObjRegistrados();
-	        		List registrados_aux = new ArrayList();
-	        		Iterator iterator = table_registrados.keySet().iterator();
-	        		int i = 0;
-	        		while (iterator.hasNext()) {
-	        		   String name = (String) iterator.next();
-	        		   prompt(i+". "+name+" -> "+table_registrados.get(name));
-	        		   registrados_aux.add(name);
-	        		   i++;
-	        		}
-
-	        		try {
-	        			while (true) {
-	        				answer = question("Escolha o numero do objeto que deseja migrar \n> ou digite all para todos\n> ou none para abortar");
-	        				if (answer.toLowerCase().trim().equals("all")){
-	        					prompt("Todos os objetos serao migrados!");
-        						//Lista os arquivos em disco no formato _ORB
-        						String curDir = System.getProperty("user.dir");
-        					    File dir = new File(curDir);
-
-        					    List lista_orb = new ArrayList();
-        					    String[] children = dir.list();
-           					    if (children == null) {
-        					    	echo("Nao foi possivel listar o diretorio");
-        					    } else {
-        					    	int k = 0;
-        					        for (int j=0; j<children.length; j++) {
-        					            // Get filename of file or directory
-        					            String filename = children[j];
-        					            if (filename.toLowerCase().startsWith("_orb@")) {
-        					            	String conteudo_xml = readFile(filename);
-        					            	lista_orb.add(conteudo_xml);
-        					            	prompt(k+". "+filename);
-        					            	k++;
-        					            }
-        					        }   
-        					    }
-	        					
-	        					answer = question("Escolha o ORB de destino\n> ou none para abortar");
-	        					if (answer.toLowerCase().trim().equals("none")){
-		        					prompt("saindo da operacao de migracao");
-		        					break;
-	        					}else{
-	        						//checo se realmente e numero
-									int orb_id = 0;
-									try {
-										orb_id = Integer.valueOf(answer);
-										break;
-									}catch(NumberFormatException e) {
-										prompt("Numero invalido!");
-										orb_id = -1;
-									}
-									if (orb_id == -1) break;
-									prompt("ORB escolhido: "+answer);
-	        						
-	        					    OrbManager orb_manager = null;
-					            	
-					        	    xstream = new XStream(new DomDriver());
-					        	    xstream.alias("reference", ObjectXmlReference.class);
-					        	    ObjectXmlReference orbmanager_reference = (ObjectXmlReference) xstream.fromXML((String) lista_orb.get(orb_id));
-					        	    ObjectReference orbmanager_ref = new ObjectReference (orbmanager_reference.getObject(), orbmanager_reference.getHost(), orbmanager_reference.getPort());
-					        	    
-					        	    orb_manager = new OrbManagerStub(orbmanager_ref);
-					        	    orb_manager.migrate(ORB.getListaObjRegistrados());
-	        					}
-	        					break; //saio do loop
-	        				}else if (answer.toLowerCase().trim().equals("none")){
-	        					prompt("saindo da operacao de migracao");
-	        					break;
-	        				}else {
-								int obj_id = 0;
-								try {
-									obj_id = Integer.valueOf(answer);
-									break;
-								}catch(NumberFormatException e) {
-									prompt("Numero invalido!");
-									obj_id = -1;
-								}
-								if (obj_id == -1) break;
-								prompt("Numero escolhido: "+answer);
-	        				}
-
-	        			}
-
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-	        		/*
-	        		Map salas_criadas = ChatClient.room_registry.getRooms();
-	        		prompt("salas criadas:");
-	        		Iterator iterator = salas_criadas.keySet().iterator();
-	        		while (iterator.hasNext()) {
-	        		   String name = (String) iterator.next();
-	        		   prompt(name);
-	        		}
-	        		*/
+	        		migrate();
 	        	}else if (command.equals("migrated")) { //lista objetos migrados
      		
 	        	}else if (command.equals("quit")) { //encerra a aplicacao
@@ -286,6 +192,107 @@ public class ChatServer {
 			}
 	    }
 		return xml.toString();
+	}
+	
+	public static void migrate() {
+		String answer = "";
+		XStream xstream = null;
+		Map table_registrados = ORB.instance().getListaObjRegistrados();
+		List registrados_aux = new ArrayList();
+		Iterator iterator = table_registrados.keySet().iterator();
+		int i = 0;
+		while (iterator.hasNext()) {
+		   String name = (String) iterator.next();
+		   prompt(i+". "+name+" -> "+table_registrados.get(name));
+		   registrados_aux.add(name);
+		   i++;
+		}
+
+		try {
+			while (true) {
+				answer = question("Escolha o numero do objeto que deseja migrar \n> ou digite all para todos\n> ou none para abortar");
+				if (answer.toLowerCase().trim().equals("all")){
+					prompt("Todos os objetos serao migrados!");
+					//Lista os arquivos em disco no formato _ORB
+					String curDir = System.getProperty("user.dir");
+				    File dir = new File(curDir);
+
+				    List lista_orb = new ArrayList();
+				    String[] children = dir.list();
+					    if (children == null) {
+				    	echo("Nao foi possivel listar o diretorio");
+				    } else {
+				    	int k = 0;
+				        for (int j=0; j<children.length; j++) {
+				            // Get filename of file or directory
+				            String filename = children[j];
+				            if (filename.toLowerCase().startsWith("_orb@")) {
+				            	String conteudo_xml = readFile(filename);
+				            	lista_orb.add(conteudo_xml);
+				            	prompt(k+". "+filename);
+				            	k++;
+				            }
+				        }   
+				    }
+					
+					answer = question("Escolha o ORB de destino\n> ou none para abortar");
+					if (answer.toLowerCase().trim().equals("none")){
+    					prompt("saindo da operacao de migracao");
+    					break;
+					}else{
+						//checo se realmente e numero
+						int orb_id = 0;
+						try {
+							orb_id = Integer.valueOf(answer);
+							break;
+						}catch(NumberFormatException e) {
+							prompt("Numero invalido!");
+							orb_id = -1;
+						}
+						if (orb_id == -1) break;
+						prompt("ORB escolhido: "+answer);
+						
+					    OrbManager orb_manager = null;
+		            	
+		        	    xstream = new XStream(new DomDriver());
+		        	    xstream.alias("reference", ObjectXmlReference.class);
+		        	    ObjectXmlReference orbmanager_reference = (ObjectXmlReference) xstream.fromXML((String) lista_orb.get(orb_id));
+		        	    ObjectReference orbmanager_ref = new ObjectReference (orbmanager_reference.getObject(), orbmanager_reference.getHost(), orbmanager_reference.getPort());
+		        	    
+		        	    orb_manager = new OrbManagerStub(orbmanager_ref);
+		        	    orb_manager.migrate(ORB.getListaObjRegistrados());
+					}
+					break; //saio do loop
+				}else if (answer.toLowerCase().trim().equals("none")){
+					prompt("saindo da operacao de migracao");
+					break;
+				}else {
+					int obj_id = 0;
+					try {
+						obj_id = Integer.valueOf(answer);
+						break;
+					}catch(NumberFormatException e) {
+						prompt("Numero invalido!");
+						obj_id = -1;
+					}
+					if (obj_id == -1) break;
+					prompt("Numero escolhido: "+answer);
+				}
+
+			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		/*
+		Map salas_criadas = ChatClient.room_registry.getRooms();
+		prompt("salas criadas:");
+		Iterator iterator = salas_criadas.keySet().iterator();
+		while (iterator.hasNext()) {
+		   String name = (String) iterator.next();
+		   prompt(name);
+		}
+		*/
 	}
 
 }

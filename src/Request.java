@@ -46,6 +46,14 @@ public class Request {
 	  _codec.putDecimal(arg);
   }
 
+	public void addObjectId(String arg) {
+		_codec.putObjectId(arg);
+	}
+
+	public void addClassName(String arg) {
+		_codec.putClassName(arg);	
+	}
+	
 	public void addSequenceReference(Map hashmap) {
 		beginSequence();
 		Iterator iterator = hashmap.keySet().iterator();
@@ -135,6 +143,14 @@ public class Request {
 		_codec.addField(2, "sequence", "END");
 	}
 	
+	public void beginStruct() {
+		_codec.addField(3, "struct", "BEGIN");
+	}
+
+	public void endStruct() {
+		_codec.addField(3, "struct", "END");
+	}
+	
 	public void addSequence(String type, String value){
 		_codec.addField(3, type, value);
 	}
@@ -170,7 +186,6 @@ public class Request {
 	private void echo(String msg) {
 		System.out.println("[Request] "+msg);
 	}
-
   
 }
 

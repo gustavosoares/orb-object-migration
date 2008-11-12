@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -17,9 +18,19 @@ public class OrbManagerStub extends OrbManager {
 		echo("migrate");
 		Request req = createRequest ("migrate");
 		req.beginParameter();
-
-		req.addSequenceReference(obj_impl);
-
+		req.beginSequence();
+		Iterator iterator = obj_impl.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			ObjectImpl obj_impl_aux = (ObjectImpl) obj_impl.get(key);
+			req.beginStruct();
+			req.addObjectId(key);
+			String classname = obj_impl_aux.getClass().getName();
+			echo("classname: "+classname);
+			req.endStruct();
+		}
+		//req.addSequenceReference(obj_impl);
+		req.endSequence();
 		req.endParameter();
 		req.endXml();
 		req.invoke();

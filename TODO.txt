@@ -11,3 +11,16 @@ $migrate: lista objetos e escolhe um ou todos para migrar. Depois lista ORBs par
 $migrated: lista objetos migrados
 $quit: encerra a aplicação
 
+12/11/2008
+- Usar um servico de nomes para registrar os orbs disponiveis
+- Passar o estado do objeto
+- Sera enviado uma sequence com com obj_id, tipo de classe e o estado do objeto (se houver)
+
+
+Exemplo de xml com passagem de referencia:
+
+<struct>
+  <objectid>111</objectid>
+  <classname>XYZ</classname>
+... estado sera passado depois    
+</struct>
