@@ -6,6 +6,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +21,8 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 public class ChatServer {
 
+	public static String orb_filename = "";
+	public static OrbManager orbmanager = null;;
 	/**
 	 * @param args
 	 */
@@ -61,18 +64,28 @@ public class ChatServer {
 		
 		obj_xml_reference = null;
 		xstream = null;
-		
+		ref_xml = null;
 		////////////////////
-		// ORBManager.xml //
+		// OrbManager //////
 		////////////////////
-		String orb_filename = "_ORB@"+server_host+"@"+String.valueOf(server_port)+".xml";
-	    obj_xml_reference = new ObjectXmlReference("ORB@"+server_host+"@"+String.valueOf(server_port), server_host, String.valueOf(server_port));
+		orbmanager = new OrbManagerImpl(ORB.instance());
+		orb_filename = "__ORB@"+server_host+"@"+String.valueOf(server_port)+".xml";
+	    ior = ORB.objectToString(roomregistry);
+	    obj_xml_reference = new ObjectXmlReference(ior, server_host, String.valueOf(server_port));
 		xstream = new XStream();
 		xstream.alias("reference", ObjectXmlReference.class);
+		
 		ref_xml = xstream.toXML(obj_xml_reference);
+		echo("xml com a referencia: ");
+		System.out.println(ref_xml);
 		writeFile(orb_filename, ref_xml);
 		
-		//Start do ORB
+		obj_xml_reference = null;
+		xstream = null;
+		ref_xml = null;
+		////////////////
+		//Start do ORB /
+		////////////////
 		ORBThread orb_server = new ORBThread(ORB.instance());
 	    orb_server.start();
 	    
@@ -114,10 +127,9 @@ public class ChatServer {
 	        	if (command.equals("migrate")){ //migrate
 	        		migrate();
 	        	}else if (command.equals("migrated")) { //lista objetos migrados
-     		
+	        		migrated();
 	        	}else if (command.equals("quit")) { //encerra a aplicacao
-	        		prompt("Good-bye!");
-	        		System.exit(0);
+	        		quit();
 	        	}
 		    }else{ //envio de mensagem de texto
 		    		prompt("Comando invalido: "+command);
@@ -194,18 +206,25 @@ public class ChatServer {
 		return xml.toString();
 	}
 	
+	/**
+	 * Migracao de objetos
+	 */
 	public static void migrate() {
 		String answer = "";
 		XStream xstream = null;
 		Map table_registrados = ORB.instance().getListaObjRegistrados();
+		Map table_registrados_aux = new HashMap();
 		List registrados_aux = new ArrayList();
 		Iterator iterator = table_registrados.keySet().iterator();
 		int i = 0;
 		while (iterator.hasNext()) {
 		   String name = (String) iterator.next();
-		   prompt(i+". "+name+" -> "+table_registrados.get(name));
-		   registrados_aux.add(name);
-		   i++;
+		   if (!table_registrados.get(name).equals(orbmanager)){ //nao listo o proprio orbmanager
+			   prompt(i+". "+name+" -> "+table_registrados.get(name));
+			   registrados_aux.add(name);
+			   table_registrados_aux.put(name, table_registrados.get(name));
+			   i++;
+		   }
 		}
 
 		try {
@@ -216,7 +235,6 @@ public class ChatServer {
 					//Lista os arquivos em disco no formato _ORB
 					String curDir = System.getProperty("user.dir");
 				    File dir = new File(curDir);
-
 				    List lista_orb = new ArrayList();
 				    String[] children = dir.list();
 					    if (children == null) {
@@ -226,11 +244,13 @@ public class ChatServer {
 				        for (int j=0; j<children.length; j++) {
 				            // Get filename of file or directory
 				            String filename = children[j];
-				            if (filename.toLowerCase().startsWith("_orb@")) {
-				            	String conteudo_xml = readFile(filename);
-				            	lista_orb.add(conteudo_xml);
-				            	prompt(k+". "+filename);
-				            	k++;
+				            if (filename.toLowerCase().startsWith("__orb@")) {
+				            	if (! filename.equals(orb_filename)) {
+					            	String conteudo_xml = readFile(filename);
+					            	lista_orb.add(conteudo_xml);
+					            	prompt(k+". "+filename);
+					            	k++;
+				            	}
 				            }
 				        }   
 				    }
@@ -244,7 +264,6 @@ public class ChatServer {
 						int orb_id = 0;
 						try {
 							orb_id = Integer.valueOf(answer);
-							break;
 						}catch(NumberFormatException e) {
 							prompt("Numero invalido!");
 							orb_id = -1;
@@ -252,25 +271,25 @@ public class ChatServer {
 						if (orb_id == -1) break;
 						prompt("ORB escolhido: "+answer);
 						
-					    OrbManager orb_manager = null;
+					    OrbManager orb_manager_stub = null;
 		            	
 		        	    xstream = new XStream(new DomDriver());
 		        	    xstream.alias("reference", ObjectXmlReference.class);
 		        	    ObjectXmlReference orbmanager_reference = (ObjectXmlReference) xstream.fromXML((String) lista_orb.get(orb_id));
 		        	    ObjectReference orbmanager_ref = new ObjectReference (orbmanager_reference.getObject(), orbmanager_reference.getHost(), orbmanager_reference.getPort());
 		        	    
-		        	    orb_manager = new OrbManagerStub(orbmanager_ref);
-		        	    orb_manager.migrate(ORB.getListaObjRegistrados());
+		        	    orb_manager_stub = new OrbManagerStub(orbmanager_ref);
+		        	    orb_manager_stub.migrate(table_registrados_aux);
 					}
 					break; //saio do loop
 				}else if (answer.toLowerCase().trim().equals("none")){
 					prompt("saindo da operacao de migracao");
 					break;
 				}else {
+					prompt("Numero escolhido: "+answer);
 					int obj_id = 0;
 					try {
 						obj_id = Integer.valueOf(answer);
-						break;
 					}catch(NumberFormatException e) {
 						prompt("Numero invalido!");
 						obj_id = -1;
@@ -293,6 +312,21 @@ public class ChatServer {
 		   prompt(name);
 		}
 		*/
+	}
+	
+	/**
+	 * Lista objetos migrados
+	 */
+	public static void migrated() {
+		
+	}
+	
+	/**
+	 * Encerra a aplicacao
+	 */
+	public static void quit() {
+		prompt("Good-bye!");
+		System.exit(0);
 	}
 
 }

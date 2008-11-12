@@ -11,7 +11,7 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 		
 	    Address addr = ORB.instance().address();
 	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
-	    objectReference (ior);
+	    objectReference(ior);
 
 	    ORB.instance().registerObjectImpl(ior.stringify(),this);
 	}

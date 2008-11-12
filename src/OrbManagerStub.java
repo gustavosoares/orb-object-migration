@@ -26,7 +26,7 @@ public class OrbManagerStub extends OrbManager {
 			req.beginStruct();
 			req.addObjectId(key);
 			String classname = obj_impl_aux.getClass().getName();
-			echo("classname: "+classname);
+			req.addClassName(classname);
 			req.endStruct();
 		}
 		//req.addSequenceReference(obj_impl);
