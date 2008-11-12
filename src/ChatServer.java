@@ -136,13 +136,15 @@ public class ChatServer {
            					    if (children == null) {
         					    	echo("Nao foi possivel listar o diretorio");
         					    } else {
+        					    	int k = 0;
         					        for (int j=0; j<children.length; j++) {
         					            // Get filename of file or directory
         					            String filename = children[j];
         					            if (filename.toLowerCase().startsWith("_orb@")) {
         					            	String conteudo_xml = readFile(filename);
         					            	lista_orb.add(conteudo_xml);
-        					            	prompt(j+". "+filename);	
+        					            	prompt(k+". "+filename);
+        					            	k++;
         					            }
         					        }   
         					    }
@@ -159,7 +161,9 @@ public class ChatServer {
 										break;
 									}catch(NumberFormatException e) {
 										prompt("Numero invalido!");
+										orb_id = -1;
 									}
+									if (orb_id == -1) break;
 									prompt("ORB escolhido: "+answer);
 	        						
 	        					    OrbManager orb_manager = null;
@@ -183,7 +187,9 @@ public class ChatServer {
 									break;
 								}catch(NumberFormatException e) {
 									prompt("Numero invalido!");
+									obj_id = -1;
 								}
+								if (obj_id == -1) break;
 								prompt("Numero escolhido: "+answer);
 	        				}
 
