@@ -29,7 +29,7 @@ public class OrbManagerStub extends OrbManager {
 			req.addClassName(classname);
 			req.endStruct();
 		}
-		//req.addSequenceReference(obj_impl);
+
 		req.endSequence();
 		req.endParameter();
 		req.endXml();

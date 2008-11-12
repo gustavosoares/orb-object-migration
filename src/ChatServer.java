@@ -207,6 +207,14 @@ public class ChatServer {
 	}
 	
 	/**
+	 * Envia os objetos a serem migrados
+	 * @param hashmap
+	 */
+	public static void sendObject(Map hashmap) {
+		
+	}
+	
+	/**
 	 * Migracao de objetos
 	 */
 	public static void migrate() {
@@ -230,8 +238,28 @@ public class ChatServer {
 		try {
 			while (true) {
 				answer = question("Escolha o numero do objeto que deseja migrar \n> ou digite all para todos\n> ou none para abortar");
-				if (answer.toLowerCase().trim().equals("all")){
-					prompt("Todos os objetos serao migrados!");
+				if (answer.toLowerCase().trim().equals("none")){
+					prompt("saindo da operacao de migracao");
+					break;
+
+				}else{
+					if (answer.toLowerCase().trim().equals("all")){
+						prompt("Todos os objetos serao migrados");
+					}else{
+						table_registrados_aux = null;
+						table_registrados_aux = new HashMap();
+						//vejo se o numero esta valido
+						int obj_id = 0;
+						try {
+							obj_id = Integer.valueOf(answer);
+						}catch(NumberFormatException e) {
+							prompt("Numero invalido!");
+							obj_id = -1;
+						}
+						if (obj_id == -1) break;
+						prompt("Numero escolhido: "+answer);
+						table_registrados_aux.put(registrados_aux.get(obj_id), table_registrados.get(registrados_aux.get(obj_id)));
+					}
 					//Lista os arquivos em disco no formato _ORB
 					String curDir = System.getProperty("user.dir");
 				    File dir = new File(curDir);
@@ -282,20 +310,7 @@ public class ChatServer {
 		        	    orb_manager_stub.migrate(table_registrados_aux);
 					}
 					break; //saio do loop
-				}else if (answer.toLowerCase().trim().equals("none")){
-					prompt("saindo da operacao de migracao");
-					break;
-				}else {
-					prompt("Numero escolhido: "+answer);
-					int obj_id = 0;
-					try {
-						obj_id = Integer.valueOf(answer);
-					}catch(NumberFormatException e) {
-						prompt("Numero invalido!");
-						obj_id = -1;
-					}
-					if (obj_id == -1) break;
-					prompt("Numero escolhido: "+answer);
+
 				}
 
 			}
