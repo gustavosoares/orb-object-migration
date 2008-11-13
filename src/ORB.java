@@ -133,7 +133,7 @@ public class ORB
 	                    // Object key doesn't exist
 	                	ORB.echo("Objeto "+ req.getReference()+" nao foi encontrado no ORB");
 	                }else{
-	                	System.out.print("[ORB] ObjImpl que recebera o invoke "+impl);
+	                	System.out.println("[ORB] ObjImpl que recebera o invoke "+impl);
 	                	impl.invoke(req); //chamado Skel                	
 			            //Envio mensagem de reply              	
 			            req.sendReply();
