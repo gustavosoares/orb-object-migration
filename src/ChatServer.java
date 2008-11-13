@@ -22,7 +22,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 public class ChatServer {
 
 	public static String orb_filename = "";
-	public static OrbManager orbmanager = null;;
+	public static OrbManager orbmanager_skel = null;;
 	/**
 	 * @param args
 	 */
@@ -58,7 +58,7 @@ public class ChatServer {
 		xstream.alias("reference", ObjectXmlReference.class);
 		
 		String ref_xml = xstream.toXML(obj_xml_reference);
-		echo("xml com a referencia: ");
+		echo("xml com a referencia: roomregistry.xml");
 		System.out.println(ref_xml);
 		writeFile("roomregistry.xml", ref_xml);
 		
@@ -68,15 +68,16 @@ public class ChatServer {
 		////////////////////
 		// OrbManager //////
 		////////////////////
-		orbmanager = new OrbManagerImpl(ORB.instance());
+		orbmanager_skel = new OrbManagerImpl(ORB.instance());
 		orb_filename = "__ORB@"+server_host+"@"+String.valueOf(server_port)+".xml";
-	    ior = ORB.objectToString(roomregistry);
+	    //ior = ORB.objectToString(roomregistry);
+		ior = ORB.objectToString(orbmanager_skel);
 	    obj_xml_reference = new ObjectXmlReference(ior, server_host, String.valueOf(server_port));
 		xstream = new XStream();
 		xstream.alias("reference", ObjectXmlReference.class);
 		
 		ref_xml = xstream.toXML(obj_xml_reference);
-		echo("xml com a referencia: ");
+		echo("xml com a referencia: "+orb_filename);
 		System.out.println(ref_xml);
 		writeFile(orb_filename, ref_xml);
 		
@@ -207,14 +208,6 @@ public class ChatServer {
 	}
 	
 	/**
-	 * Envia os objetos a serem migrados
-	 * @param hashmap
-	 */
-	public static void sendObject(Map hashmap) {
-		
-	}
-	
-	/**
 	 * Migracao de objetos
 	 */
 	public static void migrate() {
@@ -227,7 +220,7 @@ public class ChatServer {
 		int i = 0;
 		while (iterator.hasNext()) {
 		   String name = (String) iterator.next();
-		   if (!table_registrados.get(name).equals(orbmanager)){ //nao listo o proprio orbmanager
+		   if (!table_registrados.get(name).equals(orbmanager_skel)){ //nao listo o proprio orbmanager
 			   prompt(i+". "+name+" -> "+table_registrados.get(name));
 			   registrados_aux.add(name);
 			   table_registrados_aux.put(name, table_registrados.get(name));

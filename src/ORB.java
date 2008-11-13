@@ -48,6 +48,9 @@ public class ORB
   }
 
   public void registerObjectImpl(String ior, ObjectImpl impl) {
+	  if (_objKeyImplMap.containsKey(ior)) {
+		  echo("A chave "+ior+" esta registrada");
+	  }
 	  _objKeyImplMap.put(ior, impl);
 	  echo("objeto registrado: "+ior+" <-> "+impl);
   }
@@ -124,13 +127,13 @@ public class ORB
 	                assert pdu_type == 0;
 
 	                ServerRequest req = new ServerRequest(pdu); 
-	                ORB.log("referencia do objecto para invoke: "+req.getReference());
+	                ORB.echo("referencia do objecto para invoke: "+req.getReference());
 	                ObjectImpl impl = ORB.getObjectImpl(req.getReference());
 	                if (impl == null){
 	                    // Object key doesn't exist
 	                	ORB.echo("Objeto "+ req.getReference()+" nao foi encontrado no ORB");
 	                }else{
-
+	                	System.out.print("[ORB] ObjImpl que recebera o invoke "+impl);
 	                	impl.invoke(req); //chamado Skel                	
 			            //Envio mensagem de reply              	
 			            req.sendReply();

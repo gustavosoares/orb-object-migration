@@ -130,9 +130,20 @@ public class CodecXml extends CodecXmlObject{
 		
 	}
 	
-	//Lista de ObjectReference dentro de uma sequence
+	/**
+	 * Obtem lista com a sequencia de referencias
+	 * @return
+	 */
 	public List getSequenceReference() {
 		return getSequence("reference");
+	}
+	
+	/**
+	 * Obtem sequencia de struct
+	 * @return
+	 */
+	public List getSruct() {
+		return getSequence("struct");
 	}
 	
 	public List getSequenceString() {

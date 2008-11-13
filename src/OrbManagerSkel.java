@@ -27,9 +27,12 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 		 * TODO: implementar as operacoes
 		 */
 		if (req.opname().equals("migrate")) {
+			echo("migrate received");
 			Map hash_obj = new HashMap();
-			List references = req.getSequenceReference();
+			List struct = req.getStruct();
+			echo((Object) struct);
 			//Constroi o HashMap a partir dos xml reference e registra no orb
+			/*
 			String xml_aux = "";
 			ObjectXmlReference obj_xml_aux = null;
 			ObjectReference obj_ref_aux = null;
@@ -41,7 +44,7 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 
 				hash_obj.put(obj_xml_aux.getObject(), obj_ref_aux);
 			}
-			
+			*/
 			migrate(hash_obj);
 			return true;
 		}
@@ -51,6 +54,10 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 	
 	private void echo(String msg){
 		System.out.println("[OrbManagerSkel] "+msg);
+	}
+	
+	private void echo(Object obj){
+		System.out.println("[OrbManagerSkel] "+obj);
 	}
 	
 }

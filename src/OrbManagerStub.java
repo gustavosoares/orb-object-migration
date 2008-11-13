@@ -34,7 +34,7 @@ public class OrbManagerStub extends OrbManager {
 		req.endParameter();
 		req.endXml();
 		req.invoke();
-		
+		req = null;
 	}
 
 	
