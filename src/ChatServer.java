@@ -13,8 +13,6 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import xml.ObjectXmlReference;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
@@ -253,7 +251,7 @@ public class ChatServer {
 						prompt("Numero escolhido: "+answer);
 						table_registrados_aux.put(registrados_aux.get(obj_id), table_registrados.get(registrados_aux.get(obj_id)));
 					}
-					//Lista os arquivos em disco no formato _ORB
+					//Lista os arquivos em disco no formato __ORB
 					String curDir = System.getProperty("user.dir");
 				    File dir = new File(curDir);
 				    List lista_orb = new ArrayList();

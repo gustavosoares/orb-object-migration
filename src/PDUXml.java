@@ -19,11 +19,6 @@ import javax.xml.validation.Validator;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import xml.CodecXml;
-import xml.XmlObject;
-import xml.XmlReply;
-import xml.XmlRequest;
-
 
 public class PDUXml {
 

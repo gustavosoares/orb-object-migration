@@ -9,8 +9,6 @@
 import java.util.*;
 import java.io.*;
 
-import xml.XmlReply;
-
 public class ServerRequest
 {
   private PDUXml _requestPdu;

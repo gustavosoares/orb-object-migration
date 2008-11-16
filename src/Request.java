@@ -10,9 +10,6 @@
 import java.util.*;
 import java.io.*;
 
-import xml.CodecXml;
-import xml.XmlObject;
-import xml.XmlRequest;
 
 public class Request {
   private PDUXml 	_pdu;
@@ -52,6 +49,10 @@ public class Request {
 
 	public void addClassName(String arg) {
 		_codec.putClassName(arg);	
+	}
+	
+	public void addObjectImplementation(Map obj_impl) {
+		_codec.putObjectImplementation(obj_impl);
 	}
 	
 	public void addSequenceReference(Map hashmap) {

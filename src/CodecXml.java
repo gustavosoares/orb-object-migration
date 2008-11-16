@@ -1,4 +1,4 @@
-package xml;
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -11,8 +11,6 @@ import java.util.regex.Pattern;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import xml.CodecXmlObject;
-import xml.SequenceStrings;
 
 public class CodecXml extends CodecXmlObject{
 
@@ -251,8 +249,23 @@ public class CodecXml extends CodecXmlObject{
 	    return field_value;
 	}
 	
+	
+	/**
+	 * Adiciona um objectImplentation no xml
+	 * @param obj_impl
+	 */
+	public void putObjectImplementation(Map obj_impl) {
+		Iterator iterator = obj_impl.keySet().iterator();
+		while (iterator.hasNext()) {
+			String key = (String) iterator.next();
+			ObjectImpl obj_impl_aux = (ObjectImpl) obj_impl.get(key);
+			String classname = obj_impl_aux.getClass().getName();
+			echo("classname: "+classname);
+		}
+		
+	}
+		
 	private void echo(String msg) {
 		System.out.println("[CodecXml] "+msg);
 	}
-		
 }

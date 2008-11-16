@@ -10,9 +10,6 @@
 import java.util.*;
 import java.io.*;
 
-import xml.CodecXml;
-import xml.ObjectXmlReference;
-
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 

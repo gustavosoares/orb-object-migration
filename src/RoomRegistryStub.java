@@ -2,8 +2,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import xml.ObjectXmlReference;
-
 
 public class RoomRegistryStub extends RoomRegistry {
 

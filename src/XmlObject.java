@@ -1,4 +1,4 @@
-package xml;
+
 
 public abstract class XmlObject {
 	

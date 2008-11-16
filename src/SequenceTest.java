@@ -1,4 +1,4 @@
-package xml;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,7 @@ public class SequenceTest {
 		xstream.addImplicitCollection(SequenceReference.class, "reference");
 		//xstream.addImplicitCollection(SequenceReference.class, "strings");
 		xstream.alias("sequence", SequenceReference.class);
-		xstream.alias("reference", xml.ObjectXmlReference.class);
+		xstream.alias("reference", ObjectXmlReference.class);
 		
 		String xml_sequence = xstream.toXML(sequence);
 		System.out.println(xml_sequence);

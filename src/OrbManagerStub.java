@@ -3,7 +3,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import xml.ObjectXmlReference;
+import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 public class OrbManagerStub extends OrbManager {
@@ -24,9 +25,10 @@ public class OrbManagerStub extends OrbManager {
 			String key = (String) iterator.next();
 			ObjectImpl obj_impl_aux = (ObjectImpl) obj_impl.get(key);
 			req.beginStruct();
-			req.addObjectId(key);
-			String classname = obj_impl_aux.getClass().getName();
-			req.addClassName(classname);
+			req.addObjectImplementation(obj_impl);
+			//req.addObjectId(key);
+			//String classname = obj_impl_aux.getClass().getName();
+			//req.addClassName(classname);
 			req.endStruct();
 		}
 
@@ -40,6 +42,14 @@ public class OrbManagerStub extends OrbManager {
 	
 	private void echo(String msg) {
 		System.out.println("[OrbManagerStub] "+msg);
+	}
+	
+	private void getXml(ObjectImpl obj_impl) {
+		XStream xstream = new XStream(new DomDriver());
+		String xml = xstream.toXML(obj_impl);
+		System.out.println("XML:");
+		System.out.println(xml);
+		System.out.println("---------");
 	}
 
 }

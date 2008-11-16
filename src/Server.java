@@ -12,7 +12,6 @@ import java.lang.*;
 import java.net.*;
 import java.util.*;
 
-import xml.ObjectXmlReference;
 
 import com.thoughtworks.xstream.XStream;
 

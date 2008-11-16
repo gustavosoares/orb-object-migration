@@ -1,4 +1,4 @@
-package xml;
+
 /**
  * Classe usada para construcao do xml com a referencia do objeto
  * @author gustavosoares

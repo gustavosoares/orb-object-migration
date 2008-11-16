@@ -12,8 +12,6 @@ import java.io.*;
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
 
-import xml.ObjectXmlReference;
-
 public class ObjectReference
 {
   private Address   			_addr;
