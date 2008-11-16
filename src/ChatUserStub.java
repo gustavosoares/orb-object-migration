@@ -1,8 +1,11 @@
 
 public class ChatUserStub extends ChatUser {
-
+	
+	private ObjectReference _ref;
+	
 	public ChatUserStub(ObjectReference ref) {
-		objectReference(ref);
+		_ref = ref;
+		objectReference(_ref);
 	}
 	
 	@Override
@@ -62,4 +65,7 @@ public class ChatUserStub extends ChatUser {
 		return name;
 	}
 
+	public ObjectReference getObjectReference(){
+		return _ref;
+	}
 }

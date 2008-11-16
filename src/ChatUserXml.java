@@ -3,17 +3,15 @@
 public class ChatUserXml {
 	
 	private String name;
-	private String objectid;
 	private String classname;
 	private String reference;
 	private String host;
 	private String port;
 	
-	public ChatUserXml(String name, String objectid, String classname,
+	public ChatUserXml(String name, String classname,
 			String reference, String host, String port) {
 
 		this.name = name;
-		this.objectid = objectid;
 		this.classname = classname;
 		this.reference = reference;
 		this.host = host;
@@ -26,14 +24,6 @@ public class ChatUserXml {
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-	public String getObjectid() {
-		return objectid;
-	}
-
-	public void setObjectid(String objectid) {
-		this.objectid = objectid;
 	}
 
 	public String getClassname() {

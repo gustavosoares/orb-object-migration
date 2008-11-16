@@ -5,12 +5,14 @@ import java.util.Map;
 
 abstract class ChatRoomSkel extends ChatRoom implements ObjectImpl {
 	
+	protected String key;
+	
 	public ChatRoomSkel() {
 		
 	    Address addr = ORB.instance().address();
 	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
 	    objectReference (ior);
-
+	    key = ior.stringify();
 	    ORB.instance().registerObjectImpl(ior.stringify(),this);
 	}
 	
@@ -71,6 +73,10 @@ abstract class ChatRoomSkel extends ChatRoom implements ObjectImpl {
 		}
 		
 		return false;
+	}
+	
+	protected String getKey(){
+		return key;
 	}
 	
 	private void echo(String msg){

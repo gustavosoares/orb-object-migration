@@ -22,7 +22,7 @@ public class XmlTesteSalas {
 		roomregistryxml.addChatroom(new ChatRoomXml("minas","id3", "ChatRoomImpl"));
 		
 		//adiciono o chatuser
-		chatroomxml_aux.addChatUser(new ChatUserXml("gustavo", "id1", "ChatUserStub", "abc123", "localhost", "5555"));
+		chatroomxml_aux.addChatUser(new ChatUserXml("gustavo", "ChatUserStub", "abc123", "localhost", "5555"));
 		
 		//ENCODE XML
 		XStream xstream = new XStream(new DomDriver());
