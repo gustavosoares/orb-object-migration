@@ -301,11 +301,43 @@ public class CodecXml extends CodecXmlObject{
 				xstream.addImplicitCollection(RoomRegistryXml.class, "chatroomskel");
 				xstream.addImplicitCollection(ChatRoomXml.class, "chatuserstub");
 				String xml = xstream.toXML(roomregistryxml);
-				echo("XML TO ENCODE:");
+				echo("XML ROOMREGISTRY TO ENCODE:");
 				System.out.println(xml);
 				append(xml+"\n");
 			}else if (classname.equals("ChatRoomImpl")){
-				echo("TODO");
+
+				ChatRoomImpl chatroom_impl = (ChatRoomImpl) obj_impl_aux;
+				String room_name = chatroom_impl.getName();
+
+				//CRIO O XML
+				ChatRoomXml chatroomxml_aux = new ChatRoomXml(room_name, chatroom_impl.getKey(), chatroom_impl.getClass().getName());
+				/////////////////////
+				// PEGO OS USUARIOS//
+				/////////////////////
+				Map usuarios_sala = chatroom_impl.getUsers();
+				Iterator iterator_users = usuarios_sala.keySet().iterator();
+				while (iterator_users.hasNext()) {
+					String user_name = (String) iterator_users.next();
+					ChatUserStub chatuser_stub = (ChatUserStub) usuarios_sala.get(user_name);
+					String classname_chatuser = chatuser_stub.getClass().getName();
+					String host_chatuser = chatuser_stub.getObjectReference().getHost();
+					String port_chatuser = String.valueOf(chatuser_stub.getObjectReference().getPort());
+					String ref_chatuser = chatuser_stub.getObjectReference().stringify();
+					ChatUserXml chatuserxml_aux = new ChatUserXml(user_name, classname_chatuser, ref_chatuser, host_chatuser, port_chatuser);
+					//Adiciono o chatuser no chatroom
+					chatroomxml_aux.addChatUser(chatuserxml_aux);
+				}
+				
+				//ENCODE XML
+				XStream xstream = new XStream(new DomDriver());
+				xstream.alias("chatroom", ChatRoomXml.class);
+				xstream.alias("chatuser", ChatUserXml.class);
+				xstream.addImplicitCollection(ChatRoomXml.class, "chatuserstub");
+				String xml = xstream.toXML(chatroomxml_aux);
+				echo("XML CHATROOM TO ENCODE:");
+				System.out.println(xml);
+				append(xml+"\n");
+				
 			}
 		}
 		
