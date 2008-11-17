@@ -121,7 +121,7 @@ public class ChatServer {
 	        	command = matcher.group(1).trim();
 	        	argument = matcher.group(2);
 	        	echo("command: "+command);
-	        	echo("argument: "+argument);
+	        	//echo("argument: "+argument);
 	        	if (argument!=null) argument = argument.trim();
 	        	if (command.equals("migrate")){ //migrate
 	        		migrate();
@@ -129,6 +129,8 @@ public class ChatServer {
 	        		migrated();
 	        	}else if (command.equals("quit")) { //encerra a aplicacao
 	        		quit();
+	        	}else if (command.equals("list")) {
+	        		list();
 	        	}
 		    }else{ //envio de mensagem de texto
 		    		prompt("Comando invalido: "+command);
@@ -203,6 +205,10 @@ public class ChatServer {
 			}
 	    }
 		return xml.toString();
+	}
+	
+	public static void list() {
+		orbmanager_skel.list();
 	}
 	
 	/**

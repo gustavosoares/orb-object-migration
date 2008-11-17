@@ -155,9 +155,22 @@ public class ServerRequest
 		return _requestPdu.codec().getSequenceReference();
 	}
 
+	/**
+	 * Retorna lista de struct
+	 * @return
+	 */
 	public List getStruct() {
 		// TODO Auto-generated method stub
 		return _requestPdu.codec().getSruct();
+	}
+	
+	/**
+	 * Retorna lista de struct sem a tag de inicio/fim do struc
+	 * @return
+	 */
+	public List getStructStriped() {
+		// TODO Auto-generated method stub
+		return _requestPdu.codec().getSructStriped();
 	}
 
 }

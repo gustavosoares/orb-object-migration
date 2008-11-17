@@ -14,7 +14,7 @@ public class OrbManagerStub extends OrbManager {
 	}
 	
 	@Override
-	public void migrate(Map obj_impl) {
+	public boolean migrate(Map obj_impl) {
 		//echo("findRom -> "+name);
 		echo("migrate");
 		Request req = createRequest ("migrate");
@@ -36,20 +36,33 @@ public class OrbManagerStub extends OrbManager {
 		req.endParameter();
 		req.endXml();
 		req.invoke();
+		
+		//Leio o reply
+		boolean result = req.getBoolean();
 		req = null;
+		return result;
+		
 	}
 
+	/**
+	 * Lista os objetos registrados
+	 * Nao precisa ser implementado no Stubg
+	 */
+	public void list() {
+		// TODO Auto-generated method stub
+
+	}
+
+	/**
+	 * Lista objetos migrados. Nao precisa nao stub
+	 */
+	public void migrated() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	private void echo(String msg) {
 		System.out.println("[OrbManagerStub] "+msg);
-	}
-	
-	private void getXml(ObjectImpl obj_impl) {
-		XStream xstream = new XStream(new DomDriver());
-		String xml = xstream.toXML(obj_impl);
-		System.out.println("XML:");
-		System.out.println(xml);
-		System.out.println("---------");
 	}
 
 }

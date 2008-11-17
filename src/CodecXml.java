@@ -90,6 +90,44 @@ public class CodecXml extends CodecXmlObject{
 		addField(xml_reference);
 	}
 	
+	private List getSequenceStriped(String field_name) {
+		
+		List fields = new ArrayList();
+		
+		StringBuffer new_buff = new StringBuffer();
+		StringTokenizer st = new StringTokenizer(getBuffer().toString(),"\n");
+		int count_tokens = st.countTokens();
+		//echo("tokens count: "+st.countTokens());
+		String linha ="";
+		boolean found = false;
+		while (st.hasMoreTokens()) {
+			while (st.hasMoreTokens()) {
+				linha = st.nextToken();
+				if (linha.trim().equals("<"+field_name+">")) {
+					found = true;
+					break;
+				}
+			}
+			if (found) {
+				//new_buff.append(linha+"\n");
+				while (st.hasMoreTokens()) {
+					linha = st.nextToken();
+					if (linha.trim().equals("</"+field_name+">")) {
+						//new_buff.append(linha);
+						fields.add(new_buff.toString());
+						new_buff.delete(0, new_buff.length());
+						found = false;
+						break;
+					}
+					new_buff.append(linha+"\n");
+				}
+			}
+		}
+		
+		return fields;
+
+	}
+	
 	public List getSequence (String field_name) {
 		
 		List fields = new ArrayList();
@@ -144,6 +182,11 @@ public class CodecXml extends CodecXmlObject{
 		return getSequence("struct");
 	}
 	
+	public List getSructStriped() {
+		// TODO Auto-generated method stub
+		return getSequenceStriped("struct");
+	}
+
 	public List getSequenceString() {
 
 		String sequence_xml = getXmlStrip("sequence");
@@ -346,4 +389,5 @@ public class CodecXml extends CodecXmlObject{
 	private void echo(String msg) {
 		System.out.println("[CodecXml] "+msg);
 	}
+
 }
