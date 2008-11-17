@@ -173,5 +173,9 @@ public class ServerRequest
 		return _requestPdu.codec().getSructStriped();
 	}
 
+	public XmlMapper getXmlMapper(String xml) {
+		return _requestPdu.codec().getXmlMapper(xml);
+	}
+
 }
 

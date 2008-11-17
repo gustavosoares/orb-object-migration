@@ -3,7 +3,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class RoomRegistryXml {
+public class RoomRegistryXml implements XmlMapper{
 	
 	private String objectid;
 	private String classname;

@@ -1,6 +1,6 @@
 
 
-public class ChatUserXml {
+public class ChatUserXml implements XmlMapper {
 	
 	private String name;
 	private String classname;

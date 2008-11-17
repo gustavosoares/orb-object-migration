@@ -3,7 +3,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class ChatRoomXml {
+public class ChatRoomXml implements XmlMapper {
 	private String name;
 	private String objectid;
 	private String classname;

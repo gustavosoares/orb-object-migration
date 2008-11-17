@@ -390,4 +390,32 @@ public class CodecXml extends CodecXmlObject{
 		System.out.println("[CodecXml] "+msg);
 	}
 
+	/**
+	 * Retorna a representacao do objeto no xml
+	 * @param xml
+	 * @return
+	 */
+	public XmlMapper getXmlMapper(String xml) {
+		
+		XmlMapper xml_mapper = null;
+		XStream xstream = new XStream(new DomDriver());
+		if (xml.startsWith("<roomregistry>")){
+			echo("Decoding roomregistry xml");		
+			xstream.alias("roomregistry", RoomRegistryXml.class);
+			xstream.alias("chatroom", ChatRoomXml.class);
+			xstream.alias("chatuser", ChatUserXml.class);
+			xstream.addImplicitCollection(RoomRegistryXml.class, "chatroomskel");
+			xstream.addImplicitCollection(ChatRoomXml.class, "chatuserstub");
+			xml_mapper = (RoomRegistryXml) xstream.fromXML(xml);
+		}else if (xml.startsWith("<chatroom>")){
+			echo("Decoding chatroom xml");
+			xstream.alias("chatroom", ChatRoomXml.class);
+			xstream.alias("chatuser", ChatUserXml.class);
+			xstream.addImplicitCollection(ChatRoomXml.class, "chatuserstub");
+			xml_mapper = (ChatRoomXml) xstream.fromXML(xml);
+		}
+		
+		return xml_mapper;
+	}
+
 }
