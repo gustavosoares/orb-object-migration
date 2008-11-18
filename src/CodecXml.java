@@ -292,6 +292,22 @@ public class CodecXml extends CodecXmlObject{
 	    return field_value;
 	}
 	
+	/**
+	 * Encondo o xml mapper na mensagem
+	 * @param xmlmapper
+	 */
+	public void putXmlMapper(XmlMapper xmlmapper) {
+		XStream xstream = new XStream(new DomDriver());
+		xstream.alias("roomregistry", RoomRegistryXml.class);
+		xstream.alias("chatroom", ChatRoomXml.class);
+		xstream.alias("chatuser", ChatUserXml.class);
+		xstream.addImplicitCollection(RoomRegistryXml.class, "chatroomskel");
+		xstream.addImplicitCollection(ChatRoomXml.class, "chatuserstub");
+		String xml = xstream.toXML(xmlmapper);
+		echo("XML TO ENCODE:");
+		System.out.println(xml);
+		append(xml+"\n");
+	}
 	
 	/**
 	 * Adiciona um objectImplentation no xml

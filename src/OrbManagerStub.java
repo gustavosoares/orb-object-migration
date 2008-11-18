@@ -12,25 +12,18 @@ public class OrbManagerStub extends OrbManager {
 	public OrbManagerStub(ObjectReference ref){
 		objectReference(ref);
 	}
-	
+
 	@Override
-	public boolean migrate(Map obj_impl) {
+	public boolean migrate(XmlMapper xmlmapper) {
 		//echo("findRom -> "+name);
 		echo("migrate");
 		Request req = createRequest ("migrate");
 		req.beginParameter();
 		req.beginSequence();
-		Iterator iterator = obj_impl.keySet().iterator();
-		while (iterator.hasNext()) {
-			String key = (String) iterator.next();
-			ObjectImpl obj_impl_aux = (ObjectImpl) obj_impl.get(key);
-			req.beginStruct();
-			req.addObjectImplementation(obj_impl);
-			//req.addObjectId(key);
-			//String classname = obj_impl_aux.getClass().getName();
-			//req.addClassName(classname);
-			req.endStruct();
-		}
+		req.beginStruct();
+		req.addXmlMapper(xmlmapper);
+		req.endStruct();
+
 
 		req.endSequence();
 		req.endParameter();
@@ -43,7 +36,7 @@ public class OrbManagerStub extends OrbManager {
 		return result;
 		
 	}
-
+	
 	/**
 	 * Lista os objetos registrados
 	 * Nao precisa ser implementado no Stubg

@@ -55,6 +55,10 @@ public class Request {
 		_codec.putObjectImplementation(obj_impl);
 	}
 	
+	public void addXmlMapper(XmlMapper xmlmapper) {
+		_codec.putXmlMapper(xmlmapper);
+	}
+	
 	public void addSequenceReference(Map hashmap) {
 		beginSequence();
 		Iterator iterator = hashmap.keySet().iterator();

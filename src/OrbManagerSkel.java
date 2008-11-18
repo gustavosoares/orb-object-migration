@@ -31,22 +31,7 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 			System.out.println("struct striped\n"+struct_striped);
 			XmlMapper xml_mapper = req.getXmlMapper((String) struct_striped.get(0));
 			
-			//Constroi o HashMap a partir dos xml reference e registra no orb
-			/*
-			String xml_aux = "";
-			ObjectXmlReference obj_xml_aux = null;
-			ObjectReference obj_ref_aux = null;
-			for (int i=0; i < references.size(); i++){
-
-				xml_aux = (String) references.get(i);
-				obj_xml_aux = objectReference().getObjectXml(xml_aux);
-				obj_ref_aux = new ObjectReference(obj_xml_aux.getObject(), obj_xml_aux.getHost(), obj_xml_aux.getPort());
-
-				hash_obj.put(obj_xml_aux.getObject(), obj_ref_aux);
-			}
-			*/
-
-			boolean result = migrate(hash_obj);
+			boolean result = migrate(xml_mapper);
 			req.putBooleanReply(result);
 			
 			return result;

@@ -15,16 +15,14 @@ public class OrbManagerImpl extends OrbManagerSkel {
 	}
 	
 	@Override
-	public boolean migrate(Map obj_impl) {
-		
+	boolean migrate(XmlMapper xmlmapper) {
 		boolean result = true;
 		// TODO Auto-generated method stub
 		echo("Registrando os objetos recebidos");
-		System.out.println(obj_impl);
+		System.out.println(xmlmapper);
 		
 		return result;
 	}
-	
 	
 	private void echo(String msg){
 		System.out.println("[OrbManagerImpl] "+msg);
