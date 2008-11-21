@@ -62,6 +62,13 @@ public class ObjectReference
 	  return _ref;
   }
 
+  /**
+   * Atualiza a string que representa o ior
+   * @param ref
+   */
+  public void updateIor(String ref) {
+	  _ref = ref;
+  }
 
   public Transport transport()
   {

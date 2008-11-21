@@ -187,6 +187,11 @@ public class CodecXml extends CodecXmlObject{
 		return getSequenceStriped("struct");
 	}
 
+	public String getStringStriped() {
+		// TODO Auto-generated method stub
+		List string = getSequenceStriped("string");
+		return (String) string.get(0);
+	}
 	public List getSequenceString() {
 
 		String sequence_xml = getXmlStrip("sequence");

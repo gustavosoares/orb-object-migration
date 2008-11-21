@@ -55,6 +55,19 @@ public class ORB
 	  echo("objeto registrado: "+ior+" <-> "+impl);
   }
   
+  public void updateKey(String oldkey, String newkey){
+	  if (_objKeyImplMap.containsKey(oldkey)) {
+		  echo("A chave "+oldkey+" sera atualizada");
+		  ObjectImpl object_impl = getObjectImpl(oldkey);
+		  _objKeyImplMap.put(newkey, object_impl);
+		  echo("Chave atualizada para "+newkey);
+		  _objKeyImplMap.remove(oldkey);
+	  }else{
+		  echo("A chave "+oldkey+" nao existe no ORB");
+	  }
+	  
+  }
+  
   /**
    * Obtem um ObjImpl no hashtable a partir de uma chave
    * @param ior

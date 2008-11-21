@@ -156,6 +156,14 @@ public class Request {
 		_codec.addField(3, "struct", "END");
 	}
 	
+	public void beginString() {
+		_codec.addField(3, "string", "BEGIN");
+	}
+	
+	public void endString() {
+		_codec.addField(3, "string", "END");
+	}
+	
 	public void addSequence(String type, String value){
 		_codec.addField(3, type, value);
 	}

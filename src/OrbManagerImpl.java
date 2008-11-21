@@ -19,13 +19,19 @@ public class OrbManagerImpl extends OrbManagerSkel {
 		boolean result = true;
 		// TODO Auto-generated method stub
 		echo("Registrando os objetos recebidos");
-		System.out.println(xmlmapper);
+		echo("Classname: "+xmlmapper.getClassname());
+		if (xmlmapper.getClassname().equals("RoomRegistryImpl")) {
+			RoomRegistryXml room_registry_xml = (RoomRegistryXml) xmlmapper;
+			String key = room_registry_xml.getObjectid();
+			String classname = room_registry_xml.getClassname();
+			RoomRegistryImpl new_room_registry = new RoomRegistryImpl();
+			_orb.updateKey(new_room_registry.objectReference().toString(), key);
+			List lista_chatroom = room_registry_xml.getLista_chatroom();
+		}else if (xmlmapper.getClassname().equals("ChatRoomImpl")) {
+			
+		}
 		
 		return result;
-	}
-	
-	private void echo(String msg){
-		System.out.println("[OrbManagerImpl] "+msg);
 	}
 
 	/**
@@ -49,7 +55,6 @@ public class OrbManagerImpl extends OrbManagerSkel {
 	 */
 	public void migrated() {
 		// TODO Auto-generated method stub
-		
 
 	}
 	
@@ -57,4 +62,11 @@ public class OrbManagerImpl extends OrbManagerSkel {
 		System.out.println("> "+msg);
 	}
 
+	private void registerObjectImpl(ObjectImpl objectimpl) {
+		
+	}
+	
+	private void echo(String msg){
+		System.out.println("[OrbManagerImpl] "+msg);
+	}
 }

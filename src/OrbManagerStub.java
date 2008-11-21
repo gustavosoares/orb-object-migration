@@ -20,10 +20,9 @@ public class OrbManagerStub extends OrbManager {
 		Request req = createRequest ("migrate");
 		req.beginParameter();
 		req.beginSequence();
-		req.beginStruct();
+		req.beginString();
 		req.addXmlMapper(xmlmapper);
-		req.endStruct();
-
+		req.endString();
 
 		req.endSequence();
 		req.endParameter();
