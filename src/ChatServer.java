@@ -51,6 +51,8 @@ public class ChatServer {
 	    roomregistry = new RoomRegistryImpl();
 	    
 	    ior = ORB.objectToString(roomregistry);
+	    ORB.setRoomRegistry(roomregistry);
+	    
 	    ObjectXmlReference obj_xml_reference = new ObjectXmlReference(ior, server_host, String.valueOf(server_port));
 		XStream xstream = new XStream();
 		xstream.alias("reference", ObjectXmlReference.class);
@@ -356,7 +358,7 @@ public class ChatServer {
 				//////////////////
 				//Pego as salas //
 				//////////////////
-				Map salas_criadas = ((RoomRegistryImpl) obj_impl_aux).getRooms();
+				Map salas_criadas = ((RoomRegistryImpl) obj_impl_aux).filhos();
 				Iterator iterator_salas = salas_criadas.keySet().iterator();
 				while(iterator_salas.hasNext()){
 					String room_name = (String) iterator_salas.next();
@@ -366,7 +368,7 @@ public class ChatServer {
 					/////////////////////
 					// PEGO OS USUARIOS//
 					/////////////////////
-					Map usuarios_sala = chatroom_impl.getUsers();
+					Map usuarios_sala = chatroom_impl.filhos();
 					Iterator iterator_users = usuarios_sala.keySet().iterator();
 					while (iterator_users.hasNext()) {
 						String user_name = (String) iterator_users.next();

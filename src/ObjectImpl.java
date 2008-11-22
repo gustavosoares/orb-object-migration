@@ -1,3 +1,5 @@
+import java.util.Map;
+
 //package fixmico;
 
 /**
@@ -10,4 +12,5 @@
 interface ObjectImpl
 {
   abstract public void invoke (ServerRequest req);
+  abstract public Map filhos ();
 }

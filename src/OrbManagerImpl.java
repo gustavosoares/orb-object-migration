@@ -8,6 +8,7 @@ import java.util.Map;
 public class OrbManagerImpl extends OrbManagerSkel {
 	
 	private ORB _orb = null;
+	private RoomRegistryImpl _roomregistryimpl = null;
 	
 	public OrbManagerImpl(ORB orb) {
 		super();
@@ -24,11 +25,16 @@ public class OrbManagerImpl extends OrbManagerSkel {
 			RoomRegistryXml room_registry_xml = (RoomRegistryXml) xmlmapper;
 			String key = room_registry_xml.getObjectid();
 			String classname = room_registry_xml.getClassname();
-			RoomRegistryImpl new_room_registry = new RoomRegistryImpl();
-			_orb.updateKey(new_room_registry.objectReference().toString(), key);
-			List lista_chatroom = room_registry_xml.getLista_chatroom();
+			_roomregistryimpl = new RoomRegistryImpl(key);
+			//_orb.updateKey(new_room_registry.objectReference().toString(), key);
+			List lista_chatroom = room_registry_xml.filhos();
+			for (int i=0; i < lista_chatroom.size(); i++) {
+				XmlMapper xmlmapper_2 = (XmlMapper) lista_chatroom.get(0);
+				registerXmlMapper(xmlmapper_2);
+			}
 		}else if (xmlmapper.getClassname().equals("ChatRoomImpl")) {
-			
+			_roomregistryimpl = (RoomRegistryImpl) _orb.getRoomRegistry();
+			registerXmlMapper(xmlmapper);
 		}
 		
 		return result;
@@ -54,7 +60,11 @@ public class OrbManagerImpl extends OrbManagerSkel {
 	 * Lista os objetos migrados
 	 */
 	public void migrated() {
-		// TODO Auto-generated method stub
+		List migrados = _orb.getListaObjMigrados();
+		for (int i = 0; i < migrados.size(); i ++) {
+			prompt("Objetos mirados:");
+			prompt((String) migrados.get(i));
+		}
 
 	}
 	
@@ -62,11 +72,37 @@ public class OrbManagerImpl extends OrbManagerSkel {
 		System.out.println("> "+msg);
 	}
 
-	private void registerObjectImpl(ObjectImpl objectimpl) {
-		
+	private void registerXmlMapper(XmlMapper xmlmapper) {
+		if (xmlmapper.getClassname().equals("ChatRoomImpl")) {
+			ChatRoomXml chatroomxml = (ChatRoomXml) xmlmapper;
+			String roomname = chatroomxml.getName();
+			String key = chatroomxml.getObjectid();
+			ChatRoomImpl chat_room_impl = new ChatRoomImpl(roomname, key);
+			List lista_chatuser = chatroomxml.filhos();
+			for (int i=0; i < lista_chatuser.size(); i++) {
+				ChatUserXml chatuserxml = (ChatUserXml) lista_chatuser.get(i);
+				String name = chatuserxml.getName();
+				String classname = chatuserxml.getClassname();
+				
+				//reference
+				String host = chatuserxml.getHost();
+				String port = chatuserxml.getPort();
+				String reference = chatuserxml.getReference();
+				ObjectReference object_reference = new ObjectReference(reference, host, port);
+				ChatUser chat_user_stub = new ChatUserStub(object_reference);
+				echo("Criado para proxy para o usuario "+name);
+				chat_room_impl.register(name, chat_user_stub);
+			}
+			_roomregistryimpl.register(roomname, chat_room_impl);
+		}
 	}
 	
 	private void echo(String msg){
 		System.out.println("[OrbManagerImpl] "+msg);
+	}
+
+	public Map filhos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

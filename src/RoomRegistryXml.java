@@ -37,6 +37,10 @@ public class RoomRegistryXml implements XmlMapper{
 	public void addChatroom(ChatRoomXml chatroom_xml) {
 		chatroomskel.add(chatroom_xml);
 	}
+
+	public List filhos() {
+		return chatroomskel;
+	}
 	
 	
 }

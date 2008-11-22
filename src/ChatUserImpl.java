@@ -1,3 +1,5 @@
+import java.util.Map;
+
 
 public class ChatUserImpl extends ChatUserSkel {
 	
@@ -33,6 +35,11 @@ public class ChatUserImpl extends ChatUserSkel {
 	
 	public void show(String msg) {
 		System.out.println("> "+msg);
+	}
+
+	public Map filhos() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -13,6 +13,12 @@ public class ChatRoomImpl extends ChatRoomSkel {
 		_users = new HashMap();
 	}
 	
+	public ChatRoomImpl(String name, String key) {
+		super(key);
+		_name = name;
+		_users = new HashMap();
+	}
+	
 	public ChatRoomImpl(String name) {
 		super();
 		_name = name;
@@ -30,7 +36,12 @@ public class ChatRoomImpl extends ChatRoomSkel {
 		echo("getUsers");
 		return _users;
 	}
-
+	
+	protected void register(String name, ChatUser user) {
+		echo("Usuario "+name+" migrado registrado");
+		_users.put(name, user);
+	}
+	
 	@Override
 	public boolean join(String name, ChatUser user) {
 
@@ -88,6 +99,10 @@ public class ChatRoomImpl extends ChatRoomSkel {
 	
 	private void echo(String msg){
 		System.out.println("[ChatRoomImpl] "+msg);
+	}
+
+	public Map filhos() {
+		return _users;
 	}
 
 }

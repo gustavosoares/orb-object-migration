@@ -11,6 +11,11 @@ public class RoomRegistryImpl extends RoomRegistrySkel {
 		salas_registradas = new HashMap();
 	}
 	
+	public RoomRegistryImpl(String key) {
+		super(key);
+		salas_registradas = new HashMap();
+	}
+
 	@Override
 	public ChatRoom findRoom(String name) {
 		// TODO Auto-generated method stub
@@ -28,7 +33,9 @@ public class RoomRegistryImpl extends RoomRegistrySkel {
 		return salas_registradas;
 	}
 
-	@Override
+	/**
+	 * Cria uma nova sala
+	 */
 	public ChatRoom newRoom(String name) {
 
 		Map rooms = salas_registradas;
@@ -42,11 +49,24 @@ public class RoomRegistryImpl extends RoomRegistrySkel {
 			echo("room ["+name+"] ja existe!!!");
 			return null;
 		}
-
+	}
+	
+	/**
+	 * Registra um objeto chatroom migrado de forma transparente para o usuario
+	 * @param name
+	 * @param chatroom
+	 */
+	protected void register(String name, ChatRoom chatroom) {
+		echo ("Sala "+name+" migrada registrada");
+		salas_registradas.put(name, chatroom);
 	}
 	
 	private void echo(String msg){
 		System.out.println("[RoomRegistryImpl] "+msg);
+	}
+
+	public Map filhos() {
+		return salas_registradas;
 	}
 
 }

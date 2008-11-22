@@ -13,6 +13,14 @@ abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
 	    ORB.instance().registerObjectImpl(ior.stringify(),this);
 	}
 	
+	public RoomRegistrySkel(String key) {
+	    Address addr = ORB.instance().address();
+	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
+	    objectReference (ior);
+
+	    ORB.instance().registerObjectImpl(key,this);
+	}
+
 	public void invoke(ServerRequest req) {
 		boolean a = dispatch(req);
 		assert (a):"dispatch Error";

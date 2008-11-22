@@ -46,5 +46,9 @@ public class ChatRoomXml implements XmlMapper {
 	public void addChatUser(ChatUserXml chatuser_xml) {
 		chatuserstub.add(chatuser_xml);
 	}
+
+	public List filhos() {
+		return chatuserstub;
+	}
 	
 }

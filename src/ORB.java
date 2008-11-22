@@ -17,6 +17,7 @@ public class ORB
   private static List  _objKeyMigrated = new ArrayList();
   private Address _addr;
   private static BufferedWriter out = null;
+  private static RoomRegistry _roomregistryimpl = null;
   Transport _transp;
 
   public ORB()
@@ -187,6 +188,14 @@ public class ORB
 	}
 	
   }
+
+	public static void setRoomRegistry(RoomRegistry roomregistry) {
+		_roomregistryimpl = roomregistry;
+	}
+	
+	public static RoomRegistry getRoomRegistry() {
+		return _roomregistryimpl;
+	}
 
 }
 

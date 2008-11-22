@@ -1,3 +1,5 @@
+import java.util.List;
+
 
 
 public class ChatUserXml implements XmlMapper {
@@ -60,6 +62,10 @@ public class ChatUserXml implements XmlMapper {
 	
 	public ObjectXmlReference getObjectXmlReference(){
 		return new ObjectXmlReference(getReference(),getHost(), getPort());
+	}
+
+	public List filhos() {
+		return null;
 	}
 
 }
