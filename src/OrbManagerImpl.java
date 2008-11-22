@@ -61,8 +61,8 @@ public class OrbManagerImpl extends OrbManagerSkel {
 	 */
 	public void migrated() {
 		List migrados = _orb.getListaObjMigrados();
+		prompt("Objetos migrados:");
 		for (int i = 0; i < migrados.size(); i ++) {
-			prompt("Objetos mirados:");
 			prompt((String) migrados.get(i));
 		}
 

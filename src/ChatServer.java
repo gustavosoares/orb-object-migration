@@ -311,7 +311,7 @@ public class ChatServer {
 		        	    XmlMapper xmlmapper = getXmlMapper(table_registrados_aux);
 		        	    if (orb_manager_stub.migrate(xmlmapper)) {
 		        	    	echo("Registrando objetos migrados");
-		        	    	//registraMigrados(table_registrados_aux);
+		        	    	registraMigrados(table_registrados_aux);
 		        	    }else{
 		        	    	prompt("Erro na migracao");
 		        	    }
@@ -337,11 +337,20 @@ public class ChatServer {
 			int i = 0;
 			while (iterator.hasNext()) {
 			   String key = (String) iterator.next();
-			   ORB.instance().addMigrated(key);
 			   ObjectImpl object_impl = null;
 			   Map hashmap_filho = null;
+			   String key_aux = "";
 			   try {
 				   object_impl = (ObjectImpl) hashmap.get(key);
+				   if (object_impl instanceof ChatRoomImpl) {
+					   ChatRoomImpl chatroomimpl = (ChatRoomImpl) object_impl;
+					   key_aux = chatroomimpl.objectReference().stringify();
+				   }else if (object_impl instanceof RoomRegistryImpl) {
+					   RoomRegistryImpl roomregistryimpl = (RoomRegistryImpl) object_impl;
+					   key_aux = roomregistryimpl.objectReference().stringify();
+				   }
+				   //echo("Migrado: "+key_aux);
+				   ORB.instance().addMigrated(key_aux);
 				   hashmap_filho = object_impl.filhos();
 			   }catch(Exception e){}
 			   registraMigrados(hashmap_filho);
