@@ -8,7 +8,7 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 
 
 public class OrbManagerStub extends OrbManager {
-
+	
 	public OrbManagerStub(ObjectReference ref){
 		objectReference(ref);
 	}

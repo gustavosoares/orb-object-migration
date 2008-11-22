@@ -36,7 +36,6 @@ public class ChatServer {
 	    		System.out.println("erro na conversao da porta. Sera usada a porta 5555");
 	    		server_port = 5555;
 	    	}
-	    	
 	    }
 
 	    TCPAddress addr = new TCPAddress (server_host, server_port);
@@ -310,7 +309,12 @@ public class ChatServer {
 		        	    
 		        	    orb_manager_stub = new OrbManagerStub(orbmanager_ref);
 		        	    XmlMapper xmlmapper = getXmlMapper(table_registrados_aux);
-		        	    orb_manager_stub.migrate(xmlmapper);
+		        	    if (orb_manager_stub.migrate(xmlmapper)) {
+		        	    	echo("Registrando objetos migrados");
+		        	    	//registraMigrados(table_registrados_aux);
+		        	    }else{
+		        	    	prompt("Erro na migracao");
+		        	    }
 					}
 					break; //saio do loop
 
@@ -325,10 +329,31 @@ public class ChatServer {
 	}
 	
 	/**
+	 * Registra objetos migrados
+	 */
+	public static void registraMigrados(Map hashmap){
+		if (hashmap != null) {
+			Iterator iterator = hashmap.keySet().iterator();
+			int i = 0;
+			while (iterator.hasNext()) {
+			   String key = (String) iterator.next();
+			   ORB.instance().addMigrated(key);
+			   ObjectImpl object_impl = null;
+			   Map hashmap_filho = null;
+			   try {
+				   object_impl = (ObjectImpl) hashmap.get(key);
+				   hashmap_filho = object_impl.filhos();
+			   }catch(Exception e){}
+			   registraMigrados(hashmap_filho);
+			}
+		}
+	}
+	
+	/**
 	 * Lista objetos migrados
 	 */
 	public static void migrated() {
-		
+		orbmanager_skel.migrated();
 	}
 	
 	/**

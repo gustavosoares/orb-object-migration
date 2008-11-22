@@ -17,7 +17,6 @@ abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
 	    Address addr = ORB.instance().address();
 	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
 	    objectReference (ior);
-
 	    ORB.instance().registerObjectImpl(key,this);
 	}
 

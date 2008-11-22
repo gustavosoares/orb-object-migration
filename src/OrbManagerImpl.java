@@ -77,6 +77,7 @@ public class OrbManagerImpl extends OrbManagerSkel {
 			ChatRoomXml chatroomxml = (ChatRoomXml) xmlmapper;
 			String roomname = chatroomxml.getName();
 			String key = chatroomxml.getObjectid();
+			echo("ChatRoom key -> " + key);
 			ChatRoomImpl chat_room_impl = new ChatRoomImpl(roomname, key);
 			List lista_chatuser = chatroomxml.filhos();
 			for (int i=0; i < lista_chatuser.size(); i++) {
@@ -90,7 +91,7 @@ public class OrbManagerImpl extends OrbManagerSkel {
 				String reference = chatuserxml.getReference();
 				ObjectReference object_reference = new ObjectReference(reference, host, port);
 				ChatUser chat_user_stub = new ChatUserStub(object_reference);
-				echo("Criado para proxy para o usuario "+name);
+				echo("Criado proxy para o usuario "+name+" -> "+reference);
 				chat_room_impl.register(name, chat_user_stub);
 			}
 			_roomregistryimpl.register(roomname, chat_room_impl);

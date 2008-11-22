@@ -21,7 +21,6 @@ abstract class ChatRoomSkel extends ChatRoom implements ObjectImpl {
 	    Address addr = ORB.instance().address();
 	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
 	    objectReference (ior);
-	    key = ior.stringify();
 	    ORB.instance().registerObjectImpl(key,this);
 	}
 	

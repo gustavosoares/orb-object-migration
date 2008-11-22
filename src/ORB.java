@@ -141,13 +141,13 @@ public class ORB
 	                assert pdu_type == 0;
 
 	                ServerRequest req = new ServerRequest(pdu); 
-	                ORB.echo("referencia do objecto para invoke: "+req.getReference());
+	                //ORB.echo("referencia do objecto para invoke: "+req.getReference());
 	                ObjectImpl impl = ORB.getObjectImpl(req.getReference());
 	                if (impl == null){
 	                    // Object key doesn't exist
 	                	ORB.echo("Objeto "+ req.getReference()+" nao foi encontrado no ORB");
 	                }else{
-	                	System.out.println("[ORB] ObjImpl que recebera o invoke "+impl);
+	                	//System.out.println("[ORB] ObjImpl que recebera o invoke "+impl);
 	                	impl.invoke(req); //chamado Skel                	
 			            //Envio mensagem de reply              	
 			            req.sendReply();
