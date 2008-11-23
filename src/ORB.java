@@ -155,7 +155,10 @@ public class ORB
 	                ////////////////////////////////
 	                String ref_aux = req.getReference();
 	                if (isMigrated(ref_aux)) {
-	                	echo("Objeto "+ref_aux+" migrado! -> EXCEPTION");
+	                	ObjectReference reference = (ObjectReference) _orb.getListaObjMigrados().get(ref_aux);
+	                	String host = reference.getHost();
+	                	String port = String.valueOf(reference.getPort());
+	                	echo("Objeto "+ref_aux+" migrado para "+host+":"+port+" -> EXCEPTION");
 	                	//TODO
 	                	//req.putObjetoMigradoExceptionReply(ref_aux);
 	                	//req.sendReply();
