@@ -70,6 +70,26 @@ public class ObjectReference
 	  _ref = ref;
   }
 
+  /**
+   * Atualiza a referencia do object reference
+   * @param ref
+   * @param host
+   * @param port
+   */
+  public void updateReference(String ref, String host, String port) {
+	  String tmp_ref = stringify();
+	  String tmp_host = getHost();
+	  String tmp_port = String.valueOf(getPort());
+	  echo("Antes: "+tmp_ref+":"+tmp_host+":"+tmp_port);
+	  updateIor(ref);
+	  setHost(host);
+	  setPort(Integer.valueOf(port));
+	  echo("Depois: "+stringify()+":"+getHost()+":"+String.valueOf(getPort()));
+	  _addr = new TCPAddress (getHost(), getPort());
+	  _transp = _addr.createTransport ();
+	  echo("Socket com o novo ORB criado");
+  }
+  
   public Transport transport()
   {
     return _transp;

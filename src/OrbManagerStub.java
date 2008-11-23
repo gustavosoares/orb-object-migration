@@ -52,9 +52,5 @@ public class OrbManagerStub extends OrbManager {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	private void echo(String msg) {
-		System.out.println("[OrbManagerStub] "+msg);
-	}
 
 }

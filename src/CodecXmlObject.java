@@ -3,6 +3,7 @@
 public class CodecXmlObject {
 	
 	private StringBuffer xml_buffer = new StringBuffer();
+	private StringBuffer tmp_xml_buffer = new StringBuffer();
 	
 	public CodecXmlObject(){
 		
@@ -63,6 +64,18 @@ public class CodecXmlObject {
 	public void addField(String xml_code) {
 		// TODO Auto-generated method stub
 		append(xml_code);
+	}
+	
+	public void setTmpBuffer(StringBuffer buffer) {
+		tmp_xml_buffer = buffer;
+	}
+	
+	public StringBuffer getTmpBuffer() {
+		return tmp_xml_buffer;
+	}
+	
+	public void clearTmpBuffer() {
+		tmp_xml_buffer.delete(0, tmp_xml_buffer.length());
 	}
 	
 }

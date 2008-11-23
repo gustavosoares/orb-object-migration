@@ -96,10 +96,6 @@ public class ChatRoomImpl extends ChatRoomSkel {
 		   chatuser.notifyMessage(name, message);
 		}		
 	}
-	
-	private void echo(String msg){
-		System.out.println("[ChatRoomImpl] "+msg);
-	}
 
 	public Map filhos() {
 		return _users;

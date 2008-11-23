@@ -35,7 +35,9 @@ public class ChatClient {
 	    	username = args[0];
 	    }
 
-	    //Leio arquivo com a referencia do RoomRegistry
+	    ///////////////////
+	    // ROOM REGISTRY //
+	    ///////////////////
 	    StringBuffer xml = new StringBuffer();
 	    try {
 	    	echo("Lendo o arquivo "+xml_file);
@@ -58,9 +60,7 @@ public class ChatClient {
 	    XStream xstream = new XStream(new DomDriver());
 	    xstream.alias("reference", ObjectXmlReference.class);
 	    ObjectXmlReference roomregistry_reference = (ObjectXmlReference) xstream.fromXML(xml.toString());
-	    
 	    ObjectReference roomregistry_ref = new ObjectReference (roomregistry_reference.getObject(), roomregistry_reference.getHost(), roomregistry_reference.getPort());
-
 	    room_registry = new RoomRegistryStub(roomregistry_ref);
 	    
 	    //////////////
@@ -112,7 +112,6 @@ public class ChatClient {
 		    String command;
 		    String argument;
 		    if (matchFound) {
-		        //echo("match found!!!");
 	        	command = matcher.group(1);
 	        	argument = matcher.group(2);
 	        	//echo("command: "+command);
@@ -156,16 +155,20 @@ public class ChatClient {
 	        		}	        		
 	        	}else if (command.equals("leave")) { //sai de uma sala
 	        		String name = argument;
-	        		if (chatroom == null) {
-	        			prompt("Voce precisa entrar em uma sala antes!");
-	        		}else{
-		        		chatroom = ChatClient.getRoom(name);
-		        		if (! chatroom.leave(username)) {
-		        			prompt("Nao foi possivel sair da sala "+name);
+	        		if (name != null) {
+		        		if (chatroom == null) {
+		        			prompt("Voce precisa entrar em uma sala antes!");
 		        		}else{
-		        			unRegisterRoom(name);
-		        			chatroom = null;
+			        		chatroom = ChatClient.getRoom(name);
+			        		if (! chatroom.leave(username)) {
+			        			prompt("Nao foi possivel sair da sala "+name);
+			        		}else{
+			        			unRegisterRoom(name);
+			        			chatroom = null;
+			        		}
 		        		}
+	        		} else {
+	        			prompt("Voce precisa informar o nome da sala que quer sair");
 	        		}
 	        	}else if (command.equals("private")) { //lista usuarios da sala atual e permite selecionar um para batepapo privado
 	        		if (chatroom == null) {

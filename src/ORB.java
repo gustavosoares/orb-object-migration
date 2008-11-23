@@ -159,23 +159,22 @@ public class ORB
 	                	String host = reference.getHost();
 	                	String port = String.valueOf(reference.getPort());
 	                	echo("Objeto "+ref_aux+" migrado para "+host+":"+port+" -> EXCEPTION");
-	                	//TODO
 	                	req.setReplyType("error");
-	                	//req.putObjetoMigradoExceptionReply(ref_aux);
-	                	//req.sendReply();
-	                }
-	                
-	                ObjectImpl impl = ORB.getObjectImpl(ref_aux);
-	                if (impl == null){
-	                    // Object key doesn't exist
-	                	ORB.echo("Objeto "+ ref_aux+" nao foi encontrado no ORB");
-	                }else{
-	                	//System.out.println("[ORB] ObjImpl que recebera o invoke "+impl);
-	                	impl.invoke(req); //chamado Skel                	
-			            //Envio mensagem de reply              	
+	                	req.putStringReply(ref_aux+":"+host+":"+port);
 			            req.sendReply();
 			            _transp.close();
 			            break;
+	                } else {
+		                ObjectImpl impl = ORB.getObjectImpl(ref_aux);
+		                if (impl == null){
+		                	ORB.echo("Objeto "+ ref_aux+" nao foi encontrado no ORB");
+		                }else{
+		                	impl.invoke(req); //chamado Skel                	
+				            //Envio mensagem de reply              	
+				            req.sendReply();
+				            _transp.close();
+				            break;
+		                }
 	                }
 	                
 	                if (pdu_type == 1) ORB.echo("PDU de reply");

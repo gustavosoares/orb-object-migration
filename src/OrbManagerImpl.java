@@ -103,9 +103,11 @@ public class OrbManagerImpl extends OrbManagerSkel {
 		}
 	}
 	
+	/*
 	private void echo(String msg){
 		System.out.println("[OrbManagerImpl] "+msg);
 	}
+	*/
 
 	public Map filhos() {
 		// TODO Auto-generated method stub

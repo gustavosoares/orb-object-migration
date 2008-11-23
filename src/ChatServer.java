@@ -386,7 +386,7 @@ public class ChatServer {
 			String key = (String) iterator.next();
 			ObjectImpl obj_impl_aux = (ObjectImpl) obj_impl.get(key);
 			String classname = obj_impl_aux.getClass().getName();
-			echo("classname: "+classname);
+			//echo("classname: "+classname);
 			if (classname.equals("RoomRegistryImpl")){
 				xml_mapper = new RoomRegistryXml(key, classname);
 				//////////////////

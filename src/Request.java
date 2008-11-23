@@ -81,6 +81,14 @@ public class Request {
 
   }
 
+  /**
+   * Obtem o tipo de reply
+   * @return
+   */
+	public String getReplyType() {
+		return _codec.getReplyType();
+	}
+	
   public String getString() {
     return _codec.getString();
   }
@@ -97,12 +105,13 @@ public class Request {
     return _codec.getDouble();
   }
   
+  /**
+   * Envia a mensagem para o skel
+   */
   public void invoke() {
-	  
-	  //System.out.println("[Request] invoke: \n"+_codec.getBuffer().toString());
-	  
+	  	  
 	    _pdu.send(_codec.getBuffer().toString());
-	
+	    _codec.setTmpBuffer(_codec.getBuffer());
 	    long pduType = -1;
 	    pduType = _pdu.recvNextPdu ();
 	    if (pduType == 1) {
@@ -110,7 +119,6 @@ public class Request {
 	    	StringBuffer buff = new StringBuffer();
 	    	buff.append(_pdu.getReplyMessage());
 	    	_codec.setBuffer(buff);
-	    	//_pdu.transport().close();
 	    }else{
 	    	/**
 	    	 * Implementar lancamento de exception

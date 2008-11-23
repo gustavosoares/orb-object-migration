@@ -59,8 +59,5 @@ abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
 		return false;
 	}
 	
-	private void echo(String msg){
-		System.out.println("[RoomRegistrySkel] "+msg);
-	}
 	
 }

@@ -86,10 +86,5 @@ abstract class ChatRoomSkel extends ChatRoom implements ObjectImpl {
 	protected String getKey(){
 		return key;
 	}
-	
-	private void echo(String msg){
-		System.out.println("[ChatRoomSkel] "+msg);
-	}
-	
 
 }

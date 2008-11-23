@@ -60,10 +60,6 @@ public class RoomRegistryImpl extends RoomRegistrySkel {
 		echo ("Sala "+name+" migrada registrada");
 		salas_registradas.put(name, chatroom);
 	}
-	
-	private void echo(String msg){
-		System.out.println("[RoomRegistryImpl] "+msg);
-	}
 
 	public Map filhos() {
 		return salas_registradas;

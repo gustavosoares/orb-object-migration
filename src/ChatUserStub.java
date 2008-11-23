@@ -60,7 +60,15 @@ public class ChatUserStub extends ChatUser {
 		req.endXml();
 		req.invoke();
 		
-		String name = req.getString();
+		//Reply
+		String name = null;
+		String reply_type = req.getReplyType();
+		if (reply_type.equals("return")) {
+			name = req.getString();
+		} else {
+			echo("erro na mensagem de reply recebida");
+		}
+
 		req = null;
 		return name;
 	}
@@ -68,4 +76,5 @@ public class ChatUserStub extends ChatUser {
 	public ObjectReference getObjectReference(){
 		return _ref;
 	}
+	
 }

@@ -34,20 +34,11 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 			boolean result = migrate(xml_mapper);
 			req.putBooleanReply(result);
 			
-			return result;
-			
+			return result;		
 
 		}
 		
 		return false;
-	}
-	
-	private void echo(String msg){
-		System.out.println("[OrbManagerSkel] "+msg);
-	}
-	
-	private void echo(Object obj){
-		System.out.println("[OrbManagerSkel] "+obj);
 	}
 	
 }

@@ -52,9 +52,5 @@ abstract class ChatUserSkel extends ChatUser implements ObjectImpl{
 		
 		return false;
 	}
-	
-	private void echo(String msg){
-		System.out.println("[ChatUserSkel] "+msg);
-	}
 
 }
