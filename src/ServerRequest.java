@@ -71,6 +71,13 @@ public class ServerRequest
 	///////////////
 	// REPLY //////
 	///////////////
+	/**
+	 * Modifica o tipo do reply
+	 * Valores: error ou return
+	 */
+	public void setReplyType(String string) {
+		_replyPdu.codec().setReplyType(string);
+	}
 	
 	public void putIntegerReply(int amount) {
 		_replyPdu.codec().putInteger(amount);		
@@ -180,8 +187,6 @@ public class ServerRequest
 	public XmlMapper getXmlMapper(String xml) {
 		return _requestPdu.codec().getXmlMapper(xml);
 	}
-
-
 
 }
 

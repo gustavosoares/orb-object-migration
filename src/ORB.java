@@ -160,6 +160,7 @@ public class ORB
 	                	String port = String.valueOf(reference.getPort());
 	                	echo("Objeto "+ref_aux+" migrado para "+host+":"+port+" -> EXCEPTION");
 	                	//TODO
+	                	req.setReplyType("error");
 	                	//req.putObjetoMigradoExceptionReply(ref_aux);
 	                	//req.sendReply();
 	                }

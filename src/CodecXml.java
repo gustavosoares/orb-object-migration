@@ -275,12 +275,14 @@ public class CodecXml extends CodecXmlObject{
 		return new_buff.toString();
 	}
 	
+	/**
+	 * Obtem o tipo de reply
+	 * @return
+	 */
 	public String getReplyType(){
 		String field_name = "result";
-	    String patternStr = "<"+field_name+" type=\"(.*?)\">";
+	    String patternStr = "<"+field_name+" kind=\"(.*?)\">";
 	    String field_value = null;
-	    
-	    //System.out.println("[CodecXml] pattern: "+patternStr);
 	    
 	    //Regexp
 	    Pattern pattern = Pattern.compile(patternStr);
@@ -288,13 +290,23 @@ public class CodecXml extends CodecXmlObject{
 	    boolean matchFound = matcher.find();
 	    
 	    if (matchFound) {
-	        // Get all groups for this match
 	    	field_value = matcher.group(matcher.groupCount());
 	    }else{
-	    	echo("field tag "+field_name+" not found!");
+	    	echo("pattern "+patternStr+" not found!");
 	    }
 	    
 	    return field_value;
+	}
+	
+	/**
+	 * Seta o tipo de reply e atualiza o stringbuffer
+	 * @param type
+	 */
+	public void setReplyType(String type) {
+		String tmp = getReplyType();
+		String buffer_tmp = getBuffer().toString().replaceAll("<result kind=\""+tmp+"\">", "<result kind=\""+type+"\">");
+		clearBuffer();
+		append(buffer_tmp);
 	}
 	
 	/**

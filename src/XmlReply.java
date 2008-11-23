@@ -10,7 +10,7 @@ public class XmlReply extends XmlObject {
 		_type = type;
 		_codec = new CodecXml();
 		_codec.append("<reply id=\""+_id+"\">\n");
-		_codec.append("  <result type=\""+_type+"\">\n");
+		_codec.append("  <result kind=\""+_type+"\">\n");
 	}
 	
 	public void endXml(){
@@ -27,5 +27,19 @@ public class XmlReply extends XmlObject {
 
 	public void addString(String value){
 		_codec.addField(2, "string", value);
+	}
+	/*
+	public void setReplyKind(String type) {
+		String tmp = _type;
+		_type = type;
+		echo("tmp: "+tmp);
+		echo("new type: "+type);
+		_codec.toString().replaceAll("<result kind=\""+tmp+"\">", "<result kind=\""+type+"\">");
+		echo("Buffer");
+		echo(_codec.toString());
+	}*/
+	
+	private void echo(String msg) {
+		System.out.println("[XmlReply] "+msg);
 	}
 }

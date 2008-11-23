@@ -52,6 +52,10 @@ public class CodecXmlObject {
 		return xml_buffer;
 	}
 	
+	public void clearBuffer() {
+		xml_buffer.delete(0, xml_buffer.length());
+	}
+	
 	public void setBuffer(StringBuffer buffer){
 		xml_buffer = buffer;
 	}
