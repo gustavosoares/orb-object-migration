@@ -52,7 +52,7 @@ public class PDUXml {
 	    if (_transp.isClosed()){
 	    	echo("request construido com transporte fechado");
 	    }else{
-	    	echo("request construido com transporte aberto");
+	    	//echo("request construido com transporte aberto");
 	    	_transp.closeSocket();
 	    }
 	    
