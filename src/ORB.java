@@ -167,7 +167,10 @@ public class ORB
 	                } else {
 		                ObjectImpl impl = ORB.getObjectImpl(ref_aux);
 		                if (impl == null){
-		                	ORB.echo("Objeto "+ ref_aux+" nao foi encontrado no ORB");
+		                	ORB.echo("Objeto para invoke "+ ref_aux+" nao foi encontrado no ORB");
+				            req.sendReply();
+				            _transp.close();
+				            break;
 		                }else{
 		                	impl.invoke(req); //chamado Skel                	
 				            //Envio mensagem de reply              	
@@ -177,7 +180,7 @@ public class ORB
 		                }
 	                }
 	                
-	                if (pdu_type == 1) ORB.echo("PDU de reply");
+	                //if (pdu_type == 1) ORB.echo("PDU de reply");
 	            }
 	        }catch (Exception e){
 	        	e.printStackTrace();

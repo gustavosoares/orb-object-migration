@@ -24,7 +24,15 @@ public class ChatRoomStub extends ChatRoom {
 		if (reply_type.equals("return")) {
 			name = req.getString();
 		} else if (reply_type.equals("error")) {
-			echo("erro na mensagem de reply recebida");
+			String msg = req.getString();
+			List parsed = getParsed(msg, ":");
+			String ref_aux = (String) parsed.get(0);
+			String host = (String) parsed.get(1);
+			String port = (String) parsed.get(2);
+			echo("atualizando a referencia");
+			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			return getName();
 		}
 		
 		req = null;
@@ -56,7 +64,15 @@ public class ChatRoomStub extends ChatRoom {
 				users.put(String.valueOf(i), obj_ref_aux);
 			}
 		} else if (reply_type.equals("error")) {
-			echo("erro na mensagem de reply recebida");
+			String msg = req.getString();
+			List parsed = getParsed(msg, ":");
+			String ref_aux = (String) parsed.get(0);
+			String host = (String) parsed.get(1);
+			String port = (String) parsed.get(2);
+			echo("atualizando a referencia");
+			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			return getUsers();
 		}
 
 		return users;
@@ -80,7 +96,15 @@ public class ChatRoomStub extends ChatRoom {
 		if (reply_type.equals("return")) {
 			result = req.getBoolean();
 		} else if (reply_type.equals("error")) {
-			echo("erro na mensagem de reply recebida");
+			String msg = req.getString();
+			List parsed = getParsed(msg, ":");
+			String ref_aux = (String) parsed.get(0);
+			String host = (String) parsed.get(1);
+			String port = (String) parsed.get(2);
+			echo("atualizando a referencia");
+			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			return join(name, user);
 		}
 		
 		req = null;
@@ -138,6 +162,8 @@ public class ChatRoomStub extends ChatRoom {
 			String port = (String) parsed.get(2);
 			echo("atualizando a referencia");
 			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			send(name, message);
 		}
 		
 		req = null;

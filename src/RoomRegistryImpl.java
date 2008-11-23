@@ -23,6 +23,7 @@ public class RoomRegistryImpl extends RoomRegistrySkel {
 		if (salas_registradas.containsKey(name)){
 			return (ChatRoom) salas_registradas.get(name);
 		}else{
+			echo("A sala "+name+" procurada nao existe!");
 			return null;
 		}
 	}

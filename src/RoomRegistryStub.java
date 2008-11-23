@@ -33,7 +33,15 @@ public class RoomRegistryStub extends RoomRegistry {
 			    chatroom = new ChatRoomStub(object_ref);
 			}			
 		} else if (reply_type.equals("error")) {
-			echo("erro na mensagem de reply recebida");
+			String msg = req.getString();
+			List parsed = getParsed(msg, ":");
+			String ref_aux = (String) parsed.get(0);
+			String host = (String) parsed.get(1);
+			String port = (String) parsed.get(2);
+			echo("atualizando a referencia");
+			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			return findRoom(name);
 		}
 		
 		return chatroom;
@@ -67,7 +75,15 @@ public class RoomRegistryStub extends RoomRegistry {
 				rooms.put(name, chatroom);
 			}			
 		} else if (reply_type.equals("error")) {
-			echo("Reply de erro recebido");
+			String msg = req.getString();
+			List parsed = getParsed(msg, ":");
+			String ref_aux = (String) parsed.get(0);
+			String host = (String) parsed.get(1);
+			String port = (String) parsed.get(2);
+			echo("atualizando a referencia");
+			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			return getRooms();
 		}
 
 		return rooms;
@@ -94,7 +110,15 @@ public class RoomRegistryStub extends RoomRegistry {
 		    ObjectReference object_ref = new ObjectReference (object_reference, object_host, object_port);
 		    chatroom = new ChatRoomStub(object_ref);
 		} else if (reply_type.equals("error")) {
-			echo("Reply de erro recebido");
+			String msg = req.getString();
+			List parsed = getParsed(msg, ":");
+			String ref_aux = (String) parsed.get(0);
+			String host = (String) parsed.get(1);
+			String port = (String) parsed.get(2);
+			echo("atualizando a referencia");
+			this.objectReference().updateReference(ref_aux, host, port);
+			echo("encaminhando o request para o endereco novo...");
+			return newRoom(name);
 		}
 
 		
