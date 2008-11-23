@@ -14,7 +14,7 @@ public class ORB
   private static ORB _orb= new ORB();
   private static String LOG_FILE = "orb_"+_orb.toString()+".log"; 
   private static Map  _objKeyImplMap = new HashMap();
-  private static List  _objKeyMigrated = new ArrayList();
+  private static Map  _objKeyMigrated = new HashMap();
   private Address _addr;
   private static BufferedWriter out = null;
   private static RoomRegistry _roomregistryimpl = null;
@@ -99,15 +99,23 @@ public class ORB
    * Adiciona chave do objeto (ior) na lista de migrados
    * @param ior
    */
-  public static void addMigrated(String ior){
-	  _objKeyMigrated.add(ior);
+  public static void addMigrated(String key, ObjectReference object_reference){
+	  _objKeyMigrated.put(key, object_reference);
   }
   
   /**
-   * Obtem lista dos objetos migrados
+   * Verifica se um objeto impl foi migrado
+   * @param reference
    * @return
    */
-  public static List getListaObjMigrados() {
+  private boolean isMigrated(String reference) {
+	  return _objKeyMigrated.containsKey(reference);
+  }
+  /**
+   * Obtem HashMap dos objetos migrados
+   * @return
+   */
+  public static Map getListaObjMigrados() {
 	  return _objKeyMigrated;
   }
   
@@ -142,10 +150,21 @@ public class ORB
 
 	                ServerRequest req = new ServerRequest(pdu); 
 	                //ORB.echo("referencia do objecto para invoke: "+req.getReference());
-	                ObjectImpl impl = ORB.getObjectImpl(req.getReference());
+	                ////////////////////////////////
+	                // VERIFICANDO SE FOI MIGRADO //
+	                ////////////////////////////////
+	                String ref_aux = req.getReference();
+	                if (isMigrated(ref_aux)) {
+	                	echo("Objeto "+ref_aux+" migrado! -> EXCEPTION");
+	                	//TODO
+	                	//req.putObjetoMigradoExceptionReply(ref_aux);
+	                	//req.sendReply();
+	                }
+	                
+	                ObjectImpl impl = ORB.getObjectImpl(ref_aux);
 	                if (impl == null){
 	                    // Object key doesn't exist
-	                	ORB.echo("Objeto "+ req.getReference()+" nao foi encontrado no ORB");
+	                	ORB.echo("Objeto "+ ref_aux+" nao foi encontrado no ORB");
 	                }else{
 	                	//System.out.println("[ORB] ObjImpl que recebera o invoke "+impl);
 	                	impl.invoke(req); //chamado Skel                	

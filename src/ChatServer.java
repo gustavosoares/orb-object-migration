@@ -311,7 +311,7 @@ public class ChatServer {
 		        	    XmlMapper xmlmapper = getXmlMapper(table_registrados_aux);
 		        	    if (orb_manager_stub.migrate(xmlmapper)) {
 		        	    	echo("Registrando objetos migrados");
-		        	    	registraMigrados(table_registrados_aux);
+		        	    	registraMigrados(table_registrados_aux, (OrbManagerStub) orb_manager_stub);
 		        	    }else{
 		        	    	prompt("Erro na migracao");
 		        	    }
@@ -331,7 +331,7 @@ public class ChatServer {
 	/**
 	 * Registra objetos migrados
 	 */
-	public static void registraMigrados(Map hashmap){
+	public static void registraMigrados(Map hashmap, OrbManagerStub orb_manager_stub){
 		if (hashmap != null) {
 			Iterator iterator = hashmap.keySet().iterator();
 			int i = 0;
@@ -350,10 +350,10 @@ public class ChatServer {
 					   key_aux = roomregistryimpl.objectReference().stringify();
 				   }
 				   //echo("Migrado: "+key_aux);
-				   ORB.instance().addMigrated(key_aux);
+				   ORB.instance().addMigrated(key_aux, orb_manager_stub.objectReference());
 				   hashmap_filho = object_impl.filhos();
 			   }catch(Exception e){}
-			   registraMigrados(hashmap_filho);
+			   registraMigrados(hashmap_filho, orb_manager_stub);
 			}
 		}
 	}

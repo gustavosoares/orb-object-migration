@@ -309,8 +309,8 @@ public class CodecXml extends CodecXmlObject{
 		xstream.addImplicitCollection(RoomRegistryXml.class, "chatroomskel");
 		xstream.addImplicitCollection(ChatRoomXml.class, "chatuserstub");
 		String xml = xstream.toXML(xmlmapper);
-		echo("XML TO ENCODE:");
-		System.out.println(xml);
+		//echo("XML TO ENCODE:");
+		//System.out.println(xml);
 		append(xml+"\n");
 	}
 	

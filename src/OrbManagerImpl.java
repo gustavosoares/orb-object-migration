@@ -60,10 +60,15 @@ public class OrbManagerImpl extends OrbManagerSkel {
 	 * Lista os objetos migrados
 	 */
 	public void migrated() {
-		List migrados = _orb.getListaObjMigrados();
+		Map migrados = _orb.getListaObjMigrados();
+		Iterator iterator = migrados.keySet().iterator();
 		prompt("Objetos migrados:");
-		for (int i = 0; i < migrados.size(); i ++) {
-			prompt((String) migrados.get(i));
+		while (iterator.hasNext()) {
+		   String key = (String) iterator.next();
+		   ObjectReference object_reference = (ObjectReference) migrados.get(key);
+		   String host = object_reference.getHost();
+		   String port = String.valueOf(object_reference.getPort());
+		   prompt(key+" -> "+host+":"+port);
 		}
 
 	}
