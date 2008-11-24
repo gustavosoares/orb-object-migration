@@ -49,6 +49,9 @@ public class ORB
   }
 
   public void registerObjectImpl(String ior, ObjectImpl impl) {
+	  if (_objKeyMigrated.containsKey(ior)) {
+		  removeMigrated(ior);
+	  }
 	  if (_objKeyImplMap.containsKey(ior)) {
 		  echo("A chave "+ior+" esta registrada");
 	  }
@@ -104,6 +107,13 @@ public class ORB
   }
   
   /**
+   * Remove um objeto da lista de migrados
+   * @param key
+   */
+  public static void removeMigrated(String key) {
+	  _objKeyMigrated.remove(key);
+  }
+  /**
    * Verifica se um objeto impl foi migrado
    * @param reference
    * @return
@@ -149,7 +159,6 @@ public class ORB
 	                assert pdu_type == 0;
 
 	                ServerRequest req = new ServerRequest(pdu); 
-	                //ORB.echo("referencia do objecto para invoke: "+req.getReference());
 	                ////////////////////////////////
 	                // VERIFICANDO SE FOI MIGRADO //
 	                ////////////////////////////////
@@ -158,7 +167,7 @@ public class ORB
 	                	ObjectReference reference = (ObjectReference) _orb.getListaObjMigrados().get(ref_aux);
 	                	String host = reference.getHost();
 	                	String port = String.valueOf(reference.getPort());
-	                	echo("Objeto "+ref_aux+" migrado para "+host+":"+port+" -> EXCEPTION");
+	                	//echo("Objeto "+ref_aux+" migrado para "+host+":"+port+" -> EXCEPTION");
 	                	req.setReplyType("error");
 	                	req.putStringReply(ref_aux+":"+host+":"+port);
 			            req.sendReply();

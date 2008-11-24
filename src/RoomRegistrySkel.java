@@ -3,13 +3,14 @@ import java.util.Map;
 
 
 abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
-
+	
+	protected String key;
+	
 	public RoomRegistrySkel() {
 		
 	    Address addr = ORB.instance().address();
 	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
 	    objectReference (ior);
-
 	    ORB.instance().registerObjectImpl(ior.stringify(),this);
 	}
 	
@@ -17,6 +18,7 @@ abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
 	    Address addr = ORB.instance().address();
 	    ObjectReference ior = new ObjectReference ("IDL:Account:1.0", addr);
 	    ior.updateIor(key);
+	    this.key = key;
 	    objectReference (ior);
 	    ORB.instance().registerObjectImpl(key,this);
 	}
@@ -58,6 +60,10 @@ abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
 		}
 		
 		return false;
+	}
+	
+	protected String getKey(){
+		return key;
 	}
 	
 	

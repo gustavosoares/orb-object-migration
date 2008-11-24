@@ -12,5 +12,5 @@ import java.util.Map;
 interface ObjectImpl
 {
   abstract public void invoke (ServerRequest req);
-  abstract public Map filhos ();
+  abstract public Map filhos();
 }

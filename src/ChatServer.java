@@ -235,7 +235,7 @@ public class ChatServer {
 
 		try {
 			while (true) {
-				answer = question("Escolha o numero do objeto que deseja migrar \n> ou digite all para todos\n> ou none para abortar");
+				answer = question("Escolha o numero do objeto que deseja migrar \n> ou all para todos\n> ou none para abortar");
 				if (answer.toLowerCase().trim().equals("none")){
 					prompt("saindo da operacao de migracao");
 					break;
@@ -334,7 +334,6 @@ public class ChatServer {
 	public static void registraMigrados(Map hashmap, OrbManagerStub orb_manager_stub){
 		if (hashmap != null) {
 			Iterator iterator = hashmap.keySet().iterator();
-			int i = 0;
 			while (iterator.hasNext()) {
 			   String key = (String) iterator.next();
 			   ObjectImpl object_impl = null;
@@ -349,7 +348,6 @@ public class ChatServer {
 					   RoomRegistryImpl roomregistryimpl = (RoomRegistryImpl) object_impl;
 					   key_aux = roomregistryimpl.objectReference().stringify();
 				   }
-				   //echo("Migrado: "+key_aux);
 				   ORB.instance().addMigrated(key_aux, orb_manager_stub.objectReference());
 				   hashmap_filho = object_impl.filhos();
 			   }catch(Exception e){}
@@ -386,7 +384,7 @@ public class ChatServer {
 			String key = (String) iterator.next();
 			ObjectImpl obj_impl_aux = (ObjectImpl) obj_impl.get(key);
 			String classname = obj_impl_aux.getClass().getName();
-			//echo("classname: "+classname);
+			echo("classname: "+classname);
 			if (classname.equals("RoomRegistryImpl")){
 				xml_mapper = new RoomRegistryXml(key, classname);
 				//////////////////

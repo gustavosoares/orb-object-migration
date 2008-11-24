@@ -89,9 +89,9 @@ public class RoomRegistryStub extends RoomRegistry {
 		return rooms;
 	}
 
-	@Override
+
 	public ChatRoom newRoom(String name) {
-		//echo("newRoom -> "+name);
+
 		Request req = createRequest ("newRoom");
 		req.beginParameter();
 		req.addString(name);
@@ -106,7 +106,6 @@ public class RoomRegistryStub extends RoomRegistry {
 			String object_reference = req.getObjectReference();
 			String object_host = req.getObjectHost();
 			String object_port = req.getObjectPort();
-			
 		    ObjectReference object_ref = new ObjectReference (object_reference, object_host, object_port);
 		    chatroom = new ChatRoomStub(object_ref);
 		} else if (reply_type.equals("error")) {
@@ -120,8 +119,7 @@ public class RoomRegistryStub extends RoomRegistry {
 			echo("encaminhando o request para o endereco novo...");
 			return newRoom(name);
 		}
-
-		
+	
 		return chatroom;
 
 	}
