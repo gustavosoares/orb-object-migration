@@ -41,4 +41,8 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 		return false;
 	}
 	
+	public String getKey() {
+		return null;
+	}
+	
 }
