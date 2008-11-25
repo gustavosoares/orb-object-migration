@@ -85,7 +85,7 @@ abstract class ChatRoomSkel extends ChatRoom implements ObjectImpl {
 		return false;
 	}
 	
-	protected String getKey(){
+	public String getKey(){
 		return key;
 	}
 

@@ -13,4 +13,5 @@ interface ObjectImpl
 {
   abstract public void invoke (ServerRequest req);
   abstract public Map filhos();
+  abstract public String getKey();
 }

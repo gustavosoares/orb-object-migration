@@ -62,7 +62,7 @@ abstract class RoomRegistrySkel extends RoomRegistry implements ObjectImpl {
 		return false;
 	}
 	
-	protected String getKey(){
+	public String getKey(){
 		return key;
 	}
 	
