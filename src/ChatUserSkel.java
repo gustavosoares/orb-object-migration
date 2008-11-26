@@ -52,5 +52,9 @@ abstract class ChatUserSkel extends ChatUser implements ObjectImpl{
 		
 		return false;
 	}
+	
+	public String getKey(){
+		return null;
+	}
 
 }

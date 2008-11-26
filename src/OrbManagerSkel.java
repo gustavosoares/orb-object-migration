@@ -28,7 +28,6 @@ abstract class OrbManagerSkel extends OrbManager implements ObjectImpl {
 			echo("migrate received");
 			Map hash_obj = new HashMap();
 			String string_xml = req.getStringStriped();
-			System.out.println("string striped\n"+string_xml);
 			XmlMapper xml_mapper = req.getXmlMapper(string_xml);
 			
 			boolean result = migrate(xml_mapper);

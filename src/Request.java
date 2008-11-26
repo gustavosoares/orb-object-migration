@@ -15,9 +15,13 @@ public class Request {
   private PDUXml 	_pdu;
   private XmlObject _xmlobject;
   private CodecXml 	_codec;
+  private ObjectReference _ref;
+  private String _opname;
 
   public Request(ObjectReference ref, String opname) {
-	_pdu = new PDUXml(ref, opname);
+	_opname = opname;
+	_ref = ref;  
+	_pdu = new PDUXml(_ref, _opname);
 
     _xmlobject = _pdu.xmlObject();
     _codec = _pdu.codec();
@@ -109,8 +113,14 @@ public class Request {
    * Envia a mensagem para o skel
    */
   public void invoke() {
-	  	  
-	    _pdu.send(_codec.getBuffer().toString());
+	  	if (_codec.getTmpBuffer().toString().length() == 0) {
+	  		_pdu.send(_codec.getBuffer().toString());
+	  		_codec.clearTmpBuffer();
+	  	}else{
+	  		_pdu.send(_codec.getTmpBuffer().toString());
+	  		_codec.clearTmpBuffer();
+	  	}
+
 	    _codec.setTmpBuffer(_codec.getBuffer());
 	    long pduType = -1;
 	    pduType = _pdu.recvNextPdu ();
@@ -119,10 +129,24 @@ public class Request {
 	    	StringBuffer buff = new StringBuffer();
 	    	buff.append(_pdu.getReplyMessage());
 	    	_codec.setBuffer(buff);
+	    	
+	    	//Reply de erro
+			String reply_type = getReplyType();
+			if (reply_type.equals("error")) {
+				String msg = getString();
+				List parsed = getParsed(msg, ":");
+				String ref_aux = (String) parsed.get(0);
+				String host = (String) parsed.get(1);
+				String port = (String) parsed.get(2);
+				echo("atualizando a referencia");
+				_ref.updateReference(ref_aux, host, port);
+				_pdu.updateReference(_ref, _opname);
+				echo("encaminhando o request para o endereco novo...");
+				//Re-invoke
+				invoke();
+			}
+			
 	    }else{
-	    	/**
-	    	 * Implementar lancamento de exception
-	    	 */
 	    	System.out.println("[Request] reply not sent");
 	    }
     
@@ -206,6 +230,15 @@ public class Request {
 	
 	private void echo(String msg) {
 		System.out.println("[Request] "+msg);
+	}
+	
+	protected List getParsed(String msg, String delimitador) {
+		List parsed = new ArrayList();
+		StringTokenizer st = new StringTokenizer(msg,delimitador);
+		while (st.hasMoreTokens()) {
+			parsed.add(st.nextToken());
+		}
+		return parsed;
 	}
   
 }

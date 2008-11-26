@@ -20,21 +20,7 @@ public class ChatRoomStub extends ChatRoom {
 		
 		//Reply
 		String name = null;
-		String reply_type = req.getReplyType();
-		if (reply_type.equals("return")) {
-			name = req.getString();
-		} else if (reply_type.equals("error")) {
-			String msg = req.getString();
-			List parsed = getParsed(msg, ":");
-			String ref_aux = (String) parsed.get(0);
-			String host = (String) parsed.get(1);
-			String port = (String) parsed.get(2);
-			echo("atualizando a referencia");
-			this.objectReference().updateReference(ref_aux, host, port);
-			echo("encaminhando o request para o endereco novo...");
-			return getName();
-		}
-		
+		name = req.getString();
 		req = null;
 		return name;
 	}
@@ -48,33 +34,20 @@ public class ChatRoomStub extends ChatRoom {
 		req.invoke();
 		
 		//Reply
-		Map users = null; 
-		String reply_type = req.getReplyType();
-		if (reply_type.equals("return")) {
-			users = new HashMap();
-			List references = req.getSequenceReference();
-			String xml_aux = "";
-			ObjectXmlReference obj_xml_aux = null;
-			ObjectReference obj_ref_aux = null;
-			for (int i=0; i < references.size(); i++){
-				//chatroom e instancia de chatroom de ChatRoomImpl
-				xml_aux = (String) references.get(i);
-				obj_xml_aux = objectReference().getObjectXml(xml_aux);
-				obj_ref_aux = new ObjectReference(obj_xml_aux.getObject(), obj_xml_aux.getHost(), obj_xml_aux.getPort());
-				users.put(String.valueOf(i), obj_ref_aux);
-			}
-		} else if (reply_type.equals("error")) {
-			String msg = req.getString();
-			List parsed = getParsed(msg, ":");
-			String ref_aux = (String) parsed.get(0);
-			String host = (String) parsed.get(1);
-			String port = (String) parsed.get(2);
-			echo("atualizando a referencia");
-			this.objectReference().updateReference(ref_aux, host, port);
-			echo("encaminhando o request para o endereco novo...");
-			return getUsers();
+		Map users = null;
+		users = new HashMap();
+		List references = req.getSequenceReference();
+		String xml_aux = "";
+		ObjectXmlReference obj_xml_aux = null;
+		ObjectReference obj_ref_aux = null;
+		for (int i=0; i < references.size(); i++){
+			//chatroom e instancia de chatroom de ChatRoomImpl
+			xml_aux = (String) references.get(i);
+			obj_xml_aux = objectReference().getObjectXml(xml_aux);
+			obj_ref_aux = new ObjectReference(obj_xml_aux.getObject(), obj_xml_aux.getHost(), obj_xml_aux.getPort());
+			users.put(String.valueOf(i), obj_ref_aux);
 		}
-
+		
 		return users;
 	}
 
@@ -92,21 +65,7 @@ public class ChatRoomStub extends ChatRoom {
 		
 		//Reply
 		boolean result = false;
-		String reply_type = req.getReplyType();
-		if (reply_type.equals("return")) {
-			result = req.getBoolean();
-		} else if (reply_type.equals("error")) {
-			String msg = req.getString();
-			List parsed = getParsed(msg, ":");
-			String ref_aux = (String) parsed.get(0);
-			String host = (String) parsed.get(1);
-			String port = (String) parsed.get(2);
-			echo("atualizando a referencia");
-			this.objectReference().updateReference(ref_aux, host, port);
-			echo("encaminhando o request para o endereco novo...");
-			return join(name, user);
-		}
-		
+		result = req.getBoolean();
 		req = null;
 		return result;
 	}
@@ -122,21 +81,7 @@ public class ChatRoomStub extends ChatRoom {
 		
 		//Reply
 		boolean result = false;
-		String reply_type = req.getReplyType();
-		if (reply_type.equals("return")) {
-			result = req.getBoolean();
-		} else if (reply_type.equals("error")) {
-			String msg = req.getString();
-			List parsed = getParsed(msg, ":");
-			String ref_aux = (String) parsed.get(0);
-			String host = (String) parsed.get(1);
-			String port = (String) parsed.get(2);
-			echo("atualizando a referencia");
-			this.objectReference().updateReference(ref_aux, host, port);
-			echo("encaminhando o request para o endereco novo...");
-			return leave(name);
-		}
-		
+		result = req.getBoolean();		
 		req = null;
 		return result;
 	}
@@ -152,20 +97,6 @@ public class ChatRoomStub extends ChatRoom {
 		req.endParameter();
 		req.endXml();
 		req.invoke();
-		
-		String reply_type = req.getReplyType();
-		if (reply_type.equals("error")) {
-			String msg = req.getString();
-			List parsed = getParsed(msg, ":");
-			String ref_aux = (String) parsed.get(0);
-			String host = (String) parsed.get(1);
-			String port = (String) parsed.get(2);
-			echo("atualizando a referencia");
-			this.objectReference().updateReference(ref_aux, host, port);
-			echo("encaminhando o request para o endereco novo...");
-			send(name, message);
-		}
-		
 		req = null;
 	}
 

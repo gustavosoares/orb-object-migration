@@ -62,13 +62,7 @@ public class ChatUserStub extends ChatUser {
 		
 		//Reply
 		String name = null;
-		String reply_type = req.getReplyType();
-		if (reply_type.equals("return")) {
-			name = req.getString();
-		} else {
-			echo("erro na mensagem de reply recebida");
-		}
-
+		name = req.getString();
 		req = null;
 		return name;
 	}

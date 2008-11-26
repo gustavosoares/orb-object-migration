@@ -103,6 +103,31 @@ public class PDUXml {
 
 	  }
 	  
+	  /**
+	   * Atualiza referencia do PDU para o novo endereco
+	   * @param ref
+	   * @param opname
+	   */
+	  public void updateReference(ObjectReference ref, String opname) {
+		    _pduType = 0;
+
+		    _transp = ref.transport();
+		    if (_transp.isClosed()){
+		    	echo("request construido com transporte fechado");
+		    }else{
+		    	_transp.closeSocket();
+		    }
+		    
+		    // Request ID
+		    _requestId = _nextRequestId++;
+		    
+		    //Crio o xml de request
+		    _xmlobject = new XmlRequest(String.valueOf(_requestId), ref.stringify(), opname);
+		    
+		    //Criar o codec
+		    _codec = (CodecXml) _xmlobject.codec();
+	  }
+	  
 	  public XmlObject xmlObject(){
 		  return _xmlobject;
 	  }

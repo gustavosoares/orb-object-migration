@@ -80,14 +80,11 @@ public class ObjectReference
 	  String tmp_ref = stringify();
 	  String tmp_host = getHost();
 	  String tmp_port = String.valueOf(getPort());
-	  echo("Antes: "+tmp_ref+":"+tmp_host+":"+tmp_port);
 	  updateIor(ref);
 	  setHost(host);
 	  setPort(Integer.valueOf(port));
-	  echo("Depois: "+stringify()+":"+getHost()+":"+String.valueOf(getPort()));
 	  _addr = new TCPAddress (getHost(), getPort());
 	  _transp = _addr.createTransport ();
-	  echo("Socket com o novo ORB criado");
   }
   
   public Transport transport()

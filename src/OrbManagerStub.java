@@ -46,7 +46,7 @@ public class OrbManagerStub extends OrbManager {
 	}
 
 	/**
-	 * Lista objetos migrados. Nao precisa nao stub
+	 * Lista objetos migrados. Nao precisa no stub
 	 */
 	public void migrated() {
 		// TODO Auto-generated method stub
