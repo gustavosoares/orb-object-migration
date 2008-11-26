@@ -106,6 +106,30 @@ public class ORB
 	  _objKeyMigrated.put(key, object_reference);
   }
   
+	/**
+	 * Registra objetos migrados no ORB
+	 */
+	public static void registraMigrados(Map hashmap, OrbManagerStub orb_manager_stub){
+		if (hashmap != null) {
+			Iterator iterator = hashmap.keySet().iterator();
+			while (iterator.hasNext()) {
+			   String key = (String) iterator.next();
+			   ObjectImpl object_impl = null;
+			   Object object = null;
+			   Map hashmap_filho = null;
+			   String key_aux = "";
+			   object = (Object) hashmap.get(key);
+			   if (object instanceof ObjectImpl) {
+				   key_aux = object.objectReference().stringify();
+				   object_impl = (ObjectImpl) object;
+				   hashmap_filho = object_impl.filhos();
+				   ORB.instance().addMigrated(key_aux, orb_manager_stub.objectReference());
+			   }
+			   registraMigrados(hashmap_filho, orb_manager_stub);
+			}
+		}
+	}
+	
   /**
    * Remove um objeto da lista de migrados
    * @param key

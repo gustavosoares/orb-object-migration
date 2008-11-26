@@ -332,28 +332,7 @@ public class ChatServer {
 	 * Registra objetos migrados
 	 */
 	public static void registraMigrados(Map hashmap, OrbManagerStub orb_manager_stub){
-		if (hashmap != null) {
-			Iterator iterator = hashmap.keySet().iterator();
-			while (iterator.hasNext()) {
-			   String key = (String) iterator.next();
-			   ObjectImpl object_impl = null;
-			   Map hashmap_filho = null;
-			   String key_aux = "";
-			   try {
-				   object_impl = (ObjectImpl) hashmap.get(key);
-				   if (object_impl instanceof ChatRoomImpl) {
-					   ChatRoomImpl chatroomimpl = (ChatRoomImpl) object_impl;
-					   key_aux = chatroomimpl.objectReference().stringify();
-				   }else if (object_impl instanceof RoomRegistryImpl) {
-					   RoomRegistryImpl roomregistryimpl = (RoomRegistryImpl) object_impl;
-					   key_aux = roomregistryimpl.objectReference().stringify();
-				   }
-				   ORB.instance().addMigrated(key_aux, orb_manager_stub.objectReference());
-				   hashmap_filho = object_impl.filhos();
-			   }catch(Exception e){}
-			   registraMigrados(hashmap_filho, orb_manager_stub);
-			}
-		}
+		ORB.registraMigrados(hashmap, orb_manager_stub);
 	}
 	
 	/**
