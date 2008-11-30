@@ -38,7 +38,6 @@ public class ChatRoomImpl extends ChatRoomSkel {
 	}
 	
 	protected void register(String name, ChatUser user) {
-		echo("Usuario "+name+" migrado registrado");
 		_users.put(name, user);
 	}
 	

@@ -246,7 +246,7 @@ public class ChatServer {
 					}else{
 						table_registrados_aux = null;
 						table_registrados_aux = new HashMap();
-						//vejo se o numero esta valido
+						//numero valido?
 						int obj_id = 0;
 						try {
 							obj_id = Integer.valueOf(answer);
@@ -308,7 +308,7 @@ public class ChatServer {
 		        	    ObjectReference orbmanager_ref = new ObjectReference (orbmanager_reference.getObject(), orbmanager_reference.getHost(), orbmanager_reference.getPort());
 		        	    
 		        	    orb_manager_stub = new OrbManagerStub(orbmanager_ref);
-		        	    XmlMapper xmlmapper = getXmlMapper(table_registrados_aux);
+		        	    XmlMapper xmlmapper = ((OrbManagerStub) orb_manager_stub).translateToXmlMapper(table_registrados_aux);
 		        	    if (orb_manager_stub.migrate(xmlmapper)) {
 		        	    	echo("Registrando objetos migrados");
 		        	    	registraMigrados(table_registrados_aux, (OrbManagerStub) orb_manager_stub);
