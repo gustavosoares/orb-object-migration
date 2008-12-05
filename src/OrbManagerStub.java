@@ -5,6 +5,8 @@ import java.util.Map;
 
 import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.io.xml.DomDriver;
+import java.lang.reflect.*;
+
 
 
 public class OrbManagerStub extends OrbManager {
@@ -67,6 +69,8 @@ public class OrbManagerStub extends OrbManager {
 				//////////////////
 				//Pego as salas //
 				//////////////////
+				
+				
 				Map salas_criadas = ((RoomRegistryImpl) obj_impl_aux).filhos();
 				Iterator iterator_salas = salas_criadas.keySet().iterator();
 				while(iterator_salas.hasNext()){

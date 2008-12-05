@@ -50,7 +50,7 @@ public class ChatServer {
 	    roomregistry = new RoomRegistryImpl();
 	    
 	    ior = ORB.objectToString(roomregistry);
-	    ORB.setRoomRegistry(roomregistry);
+	    ORB.setMainSkel((ObjectImpl) roomregistry);
 	    
 	    ObjectXmlReference obj_xml_reference = new ObjectXmlReference(ior, server_host, String.valueOf(server_port));
 		XStream xstream = new XStream();
@@ -235,29 +235,28 @@ public class ChatServer {
 
 		try {
 			while (true) {
-				answer = question("Escolha o numero do objeto que deseja migrar \n> ou all para todos\n> ou none para abortar");
+				answer = question("Escolha o numero do objeto que deseja migrar \n> ou none para abortar");
 				if (answer.toLowerCase().trim().equals("none")){
 					prompt("saindo da operacao de migracao");
 					break;
 
 				}else{
-					if (answer.toLowerCase().trim().equals("all")){
-						prompt("Todos os objetos serao migrados");
-					}else{
-						table_registrados_aux = null;
-						table_registrados_aux = new HashMap();
-						//numero valido?
-						int obj_id = 0;
-						try {
-							obj_id = Integer.valueOf(answer);
-						}catch(NumberFormatException e) {
-							prompt("Numero invalido!");
-							obj_id = -1;
-						}
-						if (obj_id == -1) break;
-						prompt("Numero escolhido: "+answer);
-						table_registrados_aux.put(registrados_aux.get(obj_id), table_registrados.get(registrados_aux.get(obj_id)));
+
+					table_registrados_aux = null;
+					table_registrados_aux = new HashMap();
+					//numero valido?
+					int obj_id = 0;
+					try {
+						obj_id = Integer.valueOf(answer);
+					}catch(NumberFormatException e) {
+						prompt("Numero invalido!");
+						obj_id = -1;
 					}
+					if (obj_id == -1) break;
+					prompt("Numero escolhido: "+answer);
+					table_registrados_aux.put(registrados_aux.get(obj_id), table_registrados.get(registrados_aux.get(obj_id)));
+
+					
 					//Lista os arquivos em disco no formato __ORB
 					String curDir = System.getProperty("user.dir");
 				    File dir = new File(curDir);
@@ -311,7 +310,7 @@ public class ChatServer {
 		        	    XmlMapper xmlmapper = ((OrbManagerStub) orb_manager_stub).translateToXmlMapper(table_registrados_aux);
 		        	    if (orb_manager_stub.migrate(xmlmapper)) {
 		        	    	echo("Registrando objetos migrados");
-		        	    	registraMigrados(table_registrados_aux, (OrbManagerStub) orb_manager_stub);
+		        	    	ORB.registraMigrados(table_registrados_aux, (OrbManagerStub) orb_manager_stub);
 		        	    }else{
 		        	    	prompt("Erro na migracao");
 		        	    }
@@ -326,13 +325,6 @@ public class ChatServer {
 			e.printStackTrace();
 		}
 
-	}
-	
-	/**
-	 * Registra objetos migrados
-	 */
-	public static void registraMigrados(Map hashmap, OrbManagerStub orb_manager_stub){
-		ORB.registraMigrados(hashmap, orb_manager_stub);
 	}
 	
 	/**

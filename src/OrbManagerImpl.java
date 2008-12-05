@@ -32,7 +32,7 @@ public class OrbManagerImpl extends OrbManagerSkel {
 				registerXmlMapper(xmlmapper_2);
 			}
 		}else if (xmlmapper.getClassname().equals("ChatRoomImpl")) {
-			_roomregistryimpl = (RoomRegistryImpl) _orb.getRoomRegistry();
+			_roomregistryimpl = (RoomRegistryImpl) _orb.getMainSkel();
 			registerXmlMapper(xmlmapper);
 		}
 		

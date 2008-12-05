@@ -8,6 +8,8 @@
  */
 import java.util.*;
 import java.io.*;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 
 public class ORB
 {
@@ -17,7 +19,7 @@ public class ORB
   private static Map  _objKeyMigrated = new HashMap();
   private Address _addr;
   private static BufferedWriter out = null;
-  private static RoomRegistry _roomregistryimpl = null;
+  private static ObjectImpl _mainObjImpl = null;
   Transport _transp;
 
   public ORB()
@@ -48,6 +50,11 @@ public class ORB
 	  return _addr;
   }
 
+  /**
+   * Registra esqueletos
+   * @param ior
+   * @param impl
+   */
   public void registerObjectImpl(String ior, ObjectImpl impl) {
 	  if (_objKeyMigrated.containsKey(ior)) {
 		  removeMigrated(ior);
@@ -59,10 +66,23 @@ public class ORB
 	  echo("objeto registrado: "+ior+" <-> "+impl);
   }
   
+  /**
+   * Registra objetos do tipo proxy
+   * @param ior
+   * @param proxy
+   */
+  public static void registerObject(String ior, Object proxy) {
+	  if (_objKeyImplMap.containsKey(ior)) {
+		  echo("A chave "+ior+" esta registrada... sobreescrevendo");
+	  }
+	  _objKeyImplMap.put(ior, proxy);
+	  echo("objeto proxy registrado: "+ior+" <-> "+proxy);
+  }
+  
   public void updateKey(String oldkey, String newkey){
 	  if (_objKeyImplMap.containsKey(oldkey)) {
 		  echo("A chave "+oldkey+" sera atualizada");
-		  ObjectImpl object_impl = getObjectImpl(oldkey);
+		  ObjectImpl object_impl = (ObjectImpl) getObject(oldkey);
 		  _objKeyImplMap.put(newkey, object_impl);
 		  echo("Chave atualizada para "+newkey);
 		  _objKeyImplMap.remove(oldkey);
@@ -77,8 +97,11 @@ public class ORB
    * @param ior
    * @return
    */
-  public static ObjectImpl getObjectImpl(String ior) {
-	  return (ObjectImpl) _objKeyImplMap.get(ior);
+  public static Object getObject(String ior) {
+	  Object obj = null; 
+	  obj = (Object) _objKeyImplMap.get(ior);
+	  return obj;
+	  //return (ObjectImpl) _objKeyImplMap.get(ior);
   }
 
   /**
@@ -103,6 +126,7 @@ public class ORB
    * @param ior
    */
   public static void addMigrated(String key, ObjectReference object_reference){
+	  echo("key -> "+key+" migrada");
 	  _objKeyMigrated.put(key, object_reference);
   }
   
@@ -124,6 +148,29 @@ public class ORB
 				   object_impl = (ObjectImpl) object;
 				   hashmap_filho = object_impl.filhos();
 				   ORB.instance().addMigrated(key_aux, orb_manager_stub.objectReference());
+				   
+				   //Criar proxy?
+				   if (! object_impl.equals(ORB.getMainSkel())) {
+					   String newhost = orb_manager_stub.objectReference().getHost();
+					   String newport = String.valueOf(orb_manager_stub.objectReference().getPort());
+					   echo("Criando proxy para "+object_impl.getKey()+" em "+newhost+":"+newport);
+					   String classname = object_impl.getClass().getName();
+					   classname = classname.replaceAll("Impl", "Stub");
+					   Class clazz = null;
+					   try {
+						   clazz = Class.forName(classname);
+						   Class[] parameter = new Class[1];
+						   parameter[0] = ObjectReference.class;
+						   ObjectReference ref = new ObjectReference(object_impl.getKey(),newhost,newport);
+						   Constructor ct = clazz.getConstructor(parameter);
+						   ObjectReference arglist[] = new ObjectReference[1];
+						   arglist[0] = ref;
+						   Object new_proxy = (Object) ct.newInstance(arglist);
+						   registerObject(object_impl.getKey(), new_proxy);
+					   } catch (Exception e) {
+						   e.printStackTrace();
+					   }
+				   }
 			   }
 			   registraMigrados(hashmap_filho, orb_manager_stub);
 			}
@@ -187,32 +234,33 @@ public class ORB
 	                // VERIFICANDO SE FOI MIGRADO //
 	                ////////////////////////////////
 	                String ref_aux = req.getReference();
+	                Object obj = (Object) ORB.getObject(ref_aux);
+
 	                if (isMigrated(ref_aux)) {
 	                	ObjectReference reference = (ObjectReference) _orb.getListaObjMigrados().get(ref_aux);
 	                	String host = reference.getHost();
 	                	String port = String.valueOf(reference.getPort());
-	                	//echo("Objeto "+ref_aux+" migrado para "+host+":"+port+" -> EXCEPTION");
 	                	req.setReplyType("error");
 	                	req.putStringReply(ref_aux+":"+host+":"+port);
 			            req.sendReply();
 			            _transp.close();
 			            break;
 	                } else {
-		                ObjectImpl impl = ORB.getObjectImpl(ref_aux);
+		                ObjectImpl impl = (ObjectImpl) ORB.getObject(ref_aux);
 		                if (impl == null){
 		                	ORB.echo("Objeto para invoke "+ ref_aux+" nao foi encontrado no ORB");
 				            req.sendReply();
 				            _transp.close();
 				            break;
 		                }else{
-		                	impl.invoke(req); //chamado Skel                	
+		                	impl.invoke(req); //invoke servant                	
 				            //Envio mensagem de reply              	
 				            req.sendReply();
 				            _transp.close();
 				            break;
 		                }
 	                }
-	                
+             
 	                //if (pdu_type == 1) ORB.echo("PDU de reply");
 	            }
 	        }catch (Exception e){
@@ -247,12 +295,12 @@ public class ORB
 	
   }
 
-	public static void setRoomRegistry(RoomRegistry roomregistry) {
-		_roomregistryimpl = roomregistry;
+	public static void setMainSkel(ObjectImpl MainObjImpl) {
+		_mainObjImpl = MainObjImpl;
 	}
 	
-	public static RoomRegistry getRoomRegistry() {
-		return _roomregistryimpl;
+	public static ObjectImpl getMainSkel() {
+		return _mainObjImpl;
 	}
 
 }
@@ -284,7 +332,7 @@ class trataConexao extends Thread {
 
                 ServerRequest req = new ServerRequest(pdu); 
                 ORB.log("referencia do objecto para invoke: "+req.getReference());
-                ObjectImpl impl = ORB.getObjectImpl(req.getReference());
+                ObjectImpl impl = (ObjectImpl) ORB.getObject(req.getReference());
                 if (impl == null){
                     // Object key doesn't exist
                 	ORB.echo("Objeto "+ req.getReference()+" nao foi encontrado no ORB");

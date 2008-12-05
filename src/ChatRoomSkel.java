@@ -36,7 +36,6 @@ abstract class ChatRoomSkel extends ChatRoom implements ObjectImpl {
 		 */
 		if (req.opname().equals("getName")) {
 			String name = this.getName();
-			//Adiciono o nome no xml de reply
 			req.putStringReply(name);
 			
 			return true;
